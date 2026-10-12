@@ -1,0 +1,82 @@
+{
+    "ultima_fila_procesada": 18,
+    "id_counter": {
+        "Puerto Real": {
+            "Facultad de Ciencias": {
+                "Planta 1": {
+                    "Unidades o servicios": 1
+                },
+                "Baja": {
+                    "Sal\u00f3n de Actos o de Grado": 1
+                }
+            },
+            "Escuela Superior de Ingenier\u00eda (ESI)": {
+                "Baja": {
+                    "Transporte (paradas de autob\u00fas, estaciones de tren, aparcamientos, cargadores de coche el\u00e9ctrico...)": 1
+                }
+            },
+            "Registro del Campus de Puerto Real": {
+                "Planta 1": {
+                    "Aula": 1
+                }
+            },
+            "Biblioteca del Campus de Puerto Real": {
+                "Planta 1": {
+                    "Unidades o servicios": 1
+                }
+            },
+            "Aulario Sur del Campus de Puerto Real": {
+                "Planta 6": {
+                    "Sal\u00f3n de Actos o de Grado": 1
+                }
+            }
+        },
+        "": {
+            "Ninguno": {
+                "Baja": {
+                    "Unidades o servicios": 1,
+                    "Despacho": 1,
+                    "Laboratorio o taller": 1
+                },
+                "S\u00f3tano": {
+                    "\u00c1rea de descanso": 1
+                },
+                "Planta 1": {
+                    "Unidades o servicios": 1,
+                    "Despacho": 1
+                }
+            }
+        },
+        "C\u00e1diz": {
+            "Facultad de Enfermer\u00eda y Fisioterapia": {
+                "Baja": {
+                    "Unidades o servicios": 1
+                }
+            },
+            "Colegio Mayor": {
+                "Planta 2": {
+                    "Biblioteca o sala de estudio": 2
+                }
+            }
+        },
+        "Jerez": {
+            "Aulario Carmelo Garc\u00eda Barroso": {
+                "Planta 7": {
+                    "Unidades o servicios": 1
+                }
+            },
+            "Aulario del Campus de Jerez": {
+                "Planta 6": {
+                    "Laboratorio o taller": 1
+                }
+            }
+        },
+        "Bah\u00eda de Algeciras": {
+            "Edificio I+D+i": {
+                "Baja": {
+                    "Despacho": 1
+                }
+            }
+        }
+    }
+}

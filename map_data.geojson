@@ -152,6 +152,48 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
+        "nombre": "Otro sitio más",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "biblio",
+        "planta": "2",
+        "edificio": "Colegio Mayor",
+        "campus": "Cádiz",
+        "idnum": "011000401"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.206288,
+          36.53433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Otro sitio más 2",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "biblio",
+        "planta": "2",
+        "edificio": "Colegio Mayor",
+        "campus": "Cádiz",
+        "idnum": "011000402"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.222725,
+          36.519294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
         "nombre": "Facultad de Enfermería y Fisioterapia ",
         "descrip": "",
         "enlace": "",
@@ -292,27 +334,6 @@
         "coordinates": [
           -6.211921,
           36.531806
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "Delegación de Estudiantes de la Facultad de Ciencias",
-        "descrip": "",
-        "enlace": "",
-        "tipo": "repre",
-        "planta": "baja",
-        "edificio": "Facultad de Ciencias",
-        "campus": "Puerto Real",
-        "idnum": "330100801"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.211567,
-          36.531396
         ]
       }
     },
