@@ -194,6 +194,27 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
+        "nombre": "Abrazo_del_oso",
+        "descrip": "Abrazo_free",
+        "enlace": "",
+        "tipo": "",
+        "planta": "baja",
+        "edificio": "Desconocido",
+        "campus": "Cádiz",
+        "idnum": "000100001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.305533,
+          36.530532
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
         "nombre": "Facultad de Enfermería y Fisioterapia ",
         "descrip": "",
         "enlace": "",
@@ -208,6 +229,468 @@
         "coordinates": [
           -6.278477,
           36.508256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Lugar de corridas",
+        "descrip": "Plaza de toros",
+        "enlace": "",
+        "tipo": "",
+        "planta": "1",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.232799,
+          36.596908
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Este sitio no es válido ",
+        "descrip": "Es el mejor lugar de la UCA ",
+        "enlace": "celestial.es",
+        "tipo": "",
+        "planta": "1",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.009595,
+          36.8
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Lugar de corridas",
+        "descrip": "Plaza de toros",
+        "enlace": "",
+        "tipo": "",
+        "planta": "1",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.232799,
+          36.596908
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Este sitio no es válido ",
+        "descrip": "Es el mejor lugar de la UCA ",
+        "enlace": "celestial.es",
+        "tipo": "",
+        "planta": "1",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.009595,
+          36.8
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Otro sitio más 2",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.222725,
+          36.519294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Aula Samaritanas del amor",
+        "descrip": "Aula de religión y filosofía ",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.203826,
+          36.530493
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Otro sitio más 2",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.222725,
+          36.519294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Aula Samaritanas del amor",
+        "descrip": "Aula de religión y filosofía ",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.203826,
+          36.530493
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Francia",
+        "descrip": "calle",
+        "enlace": "",
+        "tipo": "",
+        "planta": "6",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.209105,
+          36.526937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Los mejores bocadillos",
+        "descrip": "Apesta a culo de mono putrefacto, no lo recomiendo",
+        "enlace": "polla.com",
+        "tipo": "",
+        "planta": "7",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.189,
+          36.35
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Los mejores bocadillos",
+        "descrip": "Apesta a culo de mono putrefacto, no lo recomiendo",
+        "enlace": "polla.com",
+        "tipo": "",
+        "planta": "7",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.189,
+          36.35
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Ubicación secreta CEUCA",
+        "descrip": "Edificio secreto de espionaje e inteligencia",
+        "enlace": "ceuca.uca.es",
+        "tipo": "",
+        "planta": "baja",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000100001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.484868,
+          36.663547
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Plaia nudista",
+        "descrip": "Domingas a rutiplen",
+        "enlace": "",
+        "tipo": "",
+        "planta": "baja",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000100002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.226889,
+          36.575999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Facultad de Cariñosas",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "baja",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000100003"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.204733,
+          36.529838
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Plaia nudista",
+        "descrip": "Domingas a rutiplen",
+        "enlace": "",
+        "tipo": "",
+        "planta": "baja",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000100001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.226889,
+          36.575999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Facultad de Cariñosas",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "baja",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000100002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.204733,
+          36.529838
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Orfanato llevado por curas",
+        "descrip": "",
+        "enlace": "mishuevos.com",
+        "tipo": "",
+        "planta": "sótano",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000110001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.1844,
+          36.53534
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Casa de las cariñosas",
+        "descrip": "Fruticlub",
+        "enlace": "",
+        "tipo": "",
+        "planta": "sótano",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000110002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.232161,
+          36.607505
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Perro Sanxe tus mu3rt0s",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "sótano",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000110003"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.204507,
+          36.528941
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Orfanato llevado por curas",
+        "descrip": "",
+        "enlace": "mishuevos.com",
+        "tipo": "",
+        "planta": "sótano",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000110001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.1844,
+          36.53534
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Casa de las cariñosas",
+        "descrip": "Fruticlub",
+        "enlace": "",
+        "tipo": "",
+        "planta": "sótano",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000110002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.232161,
+          36.607505
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Perro Sanxe tus mu3rt0s",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "sótano",
+        "edificio": "Desconocido",
+        "campus": "Desconocido",
+        "idnum": "000110003"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.204507,
+          36.528941
         ]
       }
     },
@@ -257,6 +740,48 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
+        "nombre": "AC5",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "unidad",
+        "planta": "baja",
+        "edificio": "Aulario Norte del Campus de Puerto Real",
+        "campus": "Puerto Real",
+        "idnum": "303101201"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.213475,
+          36.529834
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "AC5",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "unidad",
+        "planta": "baja",
+        "edificio": "Aulario Norte del Campus de Puerto Real",
+        "campus": "Puerto Real",
+        "idnum": "303101202"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.213475,
+          36.529834
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
         "nombre": "Francia",
         "descrip": "calle",
         "enlace": "",
@@ -299,6 +824,90 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
+        "nombre": "Otro sitio más",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Desconocido",
+        "campus": "Puerto Real",
+        "idnum": "300000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.206288,
+          36.53433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "in PR",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Desconocido",
+        "campus": "Puerto Real",
+        "idnum": "300000002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.20616,
+          36.533399
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Otro sitio más",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Desconocido",
+        "campus": "Puerto Real",
+        "idnum": "300000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.206288,
+          36.53433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "in PR",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Desconocido",
+        "campus": "Puerto Real",
+        "idnum": "300000002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.20616,
+          36.533399
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
         "nombre": "in PR",
         "descrip": "",
         "enlace": "",
@@ -313,6 +922,48 @@
         "coordinates": [
           -6.20616,
           36.533399
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "in ESI",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Escuela Superior de Ingeniería (ESI)",
+        "campus": "Puerto Real",
+        "idnum": "328000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.201836,
+          36.537804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "in ESI",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "2",
+        "edificio": "Escuela Superior de Ingeniería (ESI)",
+        "campus": "Puerto Real",
+        "idnum": "328000002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.201836,
+          36.537804
         ]
       }
     },
@@ -376,6 +1027,48 @@
         "coordinates": [
           -6.211921,
           36.531806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "in FC",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "4",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330000001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.21146,
+          36.531269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "in FC",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "",
+        "planta": "4",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330000002"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.21146,
+          36.531269
         ]
       }
     },

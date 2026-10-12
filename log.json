@@ -1,5 +1,5 @@
 {
-    "ultima_fila_procesada": 21,
+    "ultima_fila_procesada": 54,
     "id_counter": {
         "Puerto Real": {
             "Facultad de Ciencias": {
@@ -10,7 +10,8 @@
                     "Sal\u00f3n de Actos o de Grado": 1
                 },
                 "Planta 4": {
-                    "Aseo o vestuario": 1
+                    "Aseo o vestuario": 1,
+                    "": 2
                 }
             },
             "Escuela Superior de Ingenier\u00eda (ESI)": {
@@ -18,7 +19,8 @@
                     "Transporte (paradas de autob\u00fas, estaciones de tren, aparcamientos, cargadores de coche el\u00e9ctrico...)": 1
                 },
                 "Planta 2": {
-                    "Aula": 1
+                    "Aula": 1,
+                    "": 2
                 }
             },
             "Registro del Campus de Puerto Real": {
@@ -38,7 +40,17 @@
             },
             "null": {
                 "Planta 2": {
-                    "Cafeter\u00eda, fuente o m\u00e1quina": 1
+                    "": 2
+                }
+            },
+            "Aulario Norte del Campus de Puerto Real": {
+                "Baja": {
+                    "Unidades o servicios": 2
+                }
+            },
+            "null": {
+                "Planta 2": {
+                    "": 2
                 }
             }
         },
@@ -68,6 +80,11 @@
                 "Planta 2": {
                     "Biblioteca o sala de estudio": 2
                 }
+            },
+            "null": {
+                "Baja": {
+                    "": 1
+                }
             }
         },
         "Jerez": {
@@ -86,6 +103,47 @@
             "Edificio I+D+i": {
                 "Baja": {
                     "Despacho": 1
+                }
+            }
+        },
+        "null": {
+            "null": {
+                "Planta 6": {
+                    "": 1
+                },
+                "Baja": {
+                    "": 3
+                },
+                "Planta 2": {
+                    "": 2
+                },
+                "S\u00f3tano": {
+                    "": 3
+                },
+                "Planta 1": {
+                    "": 2
+                },
+                "Planta 7": {
+                    "": 1
+                }
+            }
+        },
+        "null": {
+            "null": {
+                "Planta 2": {
+                    "": 2
+                },
+                "S\u00f3tano": {
+                    "": 3
+                },
+                "Planta 1": {
+                    "": 2
+                },
+                "Baja": {
+                    "": 2
+                },
+                "Planta 7": {
+                    "": 1
                 }
             }
         }
