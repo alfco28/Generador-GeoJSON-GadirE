@@ -5,111 +5,6 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
-        "nombre": "Hacen collares",
-        "descrip": "",
-        "enlace": "",
-        "tipo": "unidad",
-        "planta": "7",
-        "edificio": "Aulario Carmelo García Barroso",
-        "campus": "",
-        "idnum": "001001201"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.214206,
-          36.528107
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "Francia",
-        "descrip": "calle",
-        "enlace": "",
-        "tipo": "salon",
-        "planta": "6",
-        "edificio": "Aulario Sur del Campus de Puerto Real",
-        "campus": "",
-        "idnum": "004001001"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.209105,
-          36.526937
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "Casa",
-        "descrip": "hoola",
-        "enlace": "",
-        "tipo": "lab",
-        "planta": "6",
-        "edificio": "Aulario del Campus de Jerez",
-        "campus": "",
-        "idnum": "002000701"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          "",
-          ""
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "despacho",
-        "descrip": "",
-        "enlace": "",
-        "tipo": "unidad",
-        "planta": "1",
-        "edificio": "Biblioteca del Campus de Puerto Real",
-        "campus": "",
-        "idnum": "007001201"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          "",
-          ""
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "Abrazo_del_oso",
-        "descrip": "Abrazo_free",
-        "enlace": "",
-        "tipo": "despacho",
-        "planta": "baja",
-        "edificio": "Edificio I+D+i",
-        "campus": "",
-        "idnum": "020100601"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.305533,
-          36.530532
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
         "nombre": "Estrella de la muerte",
         "descrip": "",
         "enlace": "",
@@ -124,6 +19,48 @@
         "coordinates": [
           "",
           ""
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Tajo Ronda",
+        "descrip": "Tajo de Ronda, lugar turístico de interés",
+        "enlace": "https://www.andalucia.org/listing/tajo-de-ronda/18358102/",
+        "tipo": "unidad",
+        "planta": "1",
+        "edificio": "Ninguno",
+        "campus": "",
+        "idnum": "000001201"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.165905,
+          36.740725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "La cucharacha",
+        "descrip": "Playa bonita con vistas al mar",
+        "enlace": "https://www.andalucia.org/listing/playa-la-cachucha/18748102/",
+        "tipo": "despacho",
+        "planta": "baja",
+        "edificio": "Ninguno",
+        "campus": "",
+        "idnum": "000100601"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.184573,
+          36.525471
         ]
       }
     },
@@ -152,20 +89,62 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
-        "nombre": "Casa",
-        "descrip": "La puta casa",
-        "enlace": "www.alfonso.com",
-        "tipo": "aula",
-        "planta": "1",
-        "edificio": "Registro del Campus de Puerto Real",
-        "campus": "Bahía de Algeciras",
-        "idnum": "244000301"
+        "nombre": "Estadio Ramón de Carranza ",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "unidad",
+        "planta": "baja",
+        "edificio": "Ninguno",
+        "campus": "",
+        "idnum": "000101201"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -6.348124,
-          36.64474
+          -6.272825,
+          36.502449
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Cementerio",
+        "descrip": "Al lao de la ESI",
+        "enlace": "https://entrepiedrasycipreses.com/cementerio-puerto-real/",
+        "tipo": "descanso",
+        "planta": "sótano",
+        "edificio": "Ninguno",
+        "campus": "",
+        "idnum": "000110101"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.199647,
+          36.54196
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Abrazo_del_oso",
+        "descrip": "Abrazo_free",
+        "enlace": "",
+        "tipo": "despacho",
+        "planta": "baja",
+        "edificio": "Edificio I+D+i",
+        "campus": "Bahía de Algeciras",
+        "idnum": "220100601"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.305533,
+          36.530532
         ]
       }
     },
@@ -194,20 +173,20 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
-        "nombre": "Tajo Ronda",
-        "descrip": "Tajo de Ronda, lugar turístico de interés",
-        "enlace": "https://www.andalucia.org/listing/tajo-de-ronda/18358102/",
+        "nombre": "Hacen collares",
+        "descrip": "",
+        "enlace": "",
         "tipo": "unidad",
-        "planta": "1",
-        "edificio": "Ninguno",
-        "campus": "Cádiz",
-        "idnum": "000001201"
+        "planta": "7",
+        "edificio": "Aulario Carmelo García Barroso",
+        "campus": "Jerez",
+        "idnum": "101001201"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -5.165905,
-          36.740725
+          -6.214206,
+          36.528107
         ]
       }
     },
@@ -215,20 +194,62 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
-        "nombre": "Estadio Ramón de Carranza ",
-        "descrip": "",
+        "nombre": "Casa",
+        "descrip": "hoola",
         "enlace": "",
-        "tipo": "unidad",
-        "planta": "baja",
-        "edificio": "Ninguno",
-        "campus": "Cádiz",
-        "idnum": "000101201"
+        "tipo": "lab",
+        "planta": "6",
+        "edificio": "Aulario del Campus de Jerez",
+        "campus": "Jerez",
+        "idnum": "102000701"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -6.272825,
-          36.502449
+          "",
+          ""
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Francia",
+        "descrip": "calle",
+        "enlace": "",
+        "tipo": "salon",
+        "planta": "6",
+        "edificio": "Aulario Sur del Campus de Puerto Real",
+        "campus": "Puerto Real",
+        "idnum": "304001001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.209105,
+          36.526937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "despacho",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "unidad",
+        "planta": "1",
+        "edificio": "Biblioteca del Campus de Puerto Real",
+        "campus": "Puerto Real",
+        "idnum": "307001201"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "",
+          ""
         ]
       }
     },
@@ -320,41 +341,20 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
-        "nombre": "La cucharacha",
-        "descrip": "Playa bonita con vistas al mar",
-        "enlace": "https://www.andalucia.org/listing/playa-la-cachucha/18748102/",
-        "tipo": "despacho",
-        "planta": "baja",
-        "edificio": "Ninguno",
+        "nombre": "Casa",
+        "descrip": "La puta casa",
+        "enlace": "www.alfonso.com",
+        "tipo": "aula",
+        "planta": "1",
+        "edificio": "Registro del Campus de Puerto Real",
         "campus": "Puerto Real",
-        "idnum": "300100601"
+        "idnum": "344000301"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -6.184573,
-          36.525471
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "Cementerio",
-        "descrip": "Al lao de la ESI",
-        "enlace": "https://entrepiedrasycipreses.com/cementerio-puerto-real/",
-        "tipo": "descanso",
-        "planta": "sótano",
-        "edificio": "Ninguno",
-        "campus": "Puerto Real",
-        "idnum": "300110101"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.199647,
-          36.54196
+          -6.348124,
+          36.64474
         ]
       }
     }
