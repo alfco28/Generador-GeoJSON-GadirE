@@ -299,6 +299,48 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
+        "nombre": "in PR",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "cafete",
+        "planta": "2",
+        "edificio": "Desconocido",
+        "campus": "Puerto Real",
+        "idnum": "300000501"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.20616,
+          36.533399
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "in ESI",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "aula",
+        "planta": "2",
+        "edificio": "Escuela Superior de Ingeniería (ESI)",
+        "campus": "Puerto Real",
+        "idnum": "328000301"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.201836,
+          36.537804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
         "nombre": "Punto del Consorcio",
         "descrip": "Punto de recarga de tarjetas del Consorcio de Transportes",
         "enlace": "",
@@ -334,6 +376,27 @@
         "coordinates": [
           -6.211921,
           36.531806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "in FC",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "aseo",
+        "planta": "4",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330000201"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.21146,
+          36.531269
         ]
       }
     },

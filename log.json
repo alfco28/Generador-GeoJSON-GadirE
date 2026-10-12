@@ -1,5 +1,5 @@
 {
-    "ultima_fila_procesada": 18,
+    "ultima_fila_procesada": 21,
     "id_counter": {
         "Puerto Real": {
             "Facultad de Ciencias": {
@@ -8,11 +8,17 @@
                 },
                 "Baja": {
                     "Sal\u00f3n de Actos o de Grado": 1
+                },
+                "Planta 4": {
+                    "Aseo o vestuario": 1
                 }
             },
             "Escuela Superior de Ingenier\u00eda (ESI)": {
                 "Baja": {
                     "Transporte (paradas de autob\u00fas, estaciones de tren, aparcamientos, cargadores de coche el\u00e9ctrico...)": 1
+                },
+                "Planta 2": {
+                    "Aula": 1
                 }
             },
             "Registro del Campus de Puerto Real": {
@@ -28,6 +34,11 @@
             "Aulario Sur del Campus de Puerto Real": {
                 "Planta 6": {
                     "Sal\u00f3n de Actos o de Grado": 1
+                }
+            },
+            "null": {
+                "Planta 2": {
+                    "Cafeter\u00eda, fuente o m\u00e1quina": 1
                 }
             }
         },
