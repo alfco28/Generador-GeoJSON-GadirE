@@ -94,4 +94,4 @@ La identificación de cada elemento se lleva a cabo mediante las biyecciones est
 
 Considérense las limitaciones que puedan implicar este sistema numeración.
 
-Este sistema de numeración es el que usa *GadirE* para determinar y distinguir lso *features*. Es indispensable que `map_data.geojson` no contenga dos *features* con el mismo `idnum`, este programa cumple con esa condición dentro de sus límites.
+Este sistema de numeración es el que usa *GadirE* para determinar y distinguir los *features*. Es indispensable que `map_data.geojson` no contenga dos *features* con el mismo `idnum`, este programa cumple con esa condición dentro de sus límites.
