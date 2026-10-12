@@ -1,0 +1,47 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Decanato de la Facultad de Ciencias",
+        "descrip": "",
+        "tipo": "unidad",
+        "planta": "1",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330001201",
+        "favourite": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211921,
+          36.531806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Delegación de Estudiantes de la Facultad de Ciencias",
+        "descrip": "",
+        "tipo": "repre",
+        "planta": "baja",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330100801",
+        "favourite": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211567,
+          36.531396
+        ]
+      }
+    }
+  ]
+}
