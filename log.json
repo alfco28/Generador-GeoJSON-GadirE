@@ -1,5 +1,5 @@
 {
-    "ultima_fila_procesada": 54,
+    "ultima_fila_procesada": 55,
     "id_counter": {
         "Puerto Real": {
             "Facultad de Ciencias": {
@@ -7,143 +7,66 @@
                     "Unidades o servicios": 1
                 },
                 "Baja": {
-                    "Sal\u00f3n de Actos o de Grado": 1
+                    "Transporte": 1,
+                    "Salida de emergencia o punto de encuentro": 1,
+                    "Biblioteca o sala de estudio": 2,
+                    "Aseo o vestuario": 2,
+                    "Aula": 4,
+                    "Sal\u00f3n de Actos o de Grado": 1,
+                    "Cafeter\u00eda, fuente o m\u00e1quina": 2
                 },
-                "Planta 4": {
-                    "Aseo o vestuario": 1,
-                    "": 2
+                "S\u00f3tano": {
+                    "Sal\u00f3n de Actos o de Grado": 1
                 }
             },
             "Escuela Superior de Ingenier\u00eda (ESI)": {
                 "Baja": {
-                    "Transporte (paradas de autob\u00fas, estaciones de tren, aparcamientos, cargadores de coche el\u00e9ctrico...)": 1
+                    "Transporte": 3,
+                    "Sal\u00f3n de Actos o de Grado": 1,
+                    "Salida de emergencia o punto de encuentro": 1
                 },
-                "Planta 2": {
-                    "Aula": 1,
-                    "": 2
-                }
-            },
-            "Registro del Campus de Puerto Real": {
                 "Planta 1": {
-                    "Aula": 1
-                }
-            },
-            "Biblioteca del Campus de Puerto Real": {
-                "Planta 1": {
+                    "Cafeter\u00eda, fuente o m\u00e1quina": 1,
                     "Unidades o servicios": 1
-                }
-            },
-            "Aulario Sur del Campus de Puerto Real": {
-                "Planta 6": {
-                    "Sal\u00f3n de Actos o de Grado": 1
-                }
-            },
-            "null": {
-                "Planta 2": {
-                    "": 2
                 }
             },
             "Aulario Norte del Campus de Puerto Real": {
                 "Baja": {
-                    "Unidades o servicios": 2
+                    "Salida de emergencia o punto de encuentro": 1
                 }
             },
-            "null": {
-                "Planta 2": {
-                    "": 2
-                }
-            }
-        },
-        "": {
-            "Ninguno": {
+            "Biblioteca del Campus de Puerto Real": {
                 "Baja": {
-                    "Unidades o servicios": 1,
-                    "Despacho": 1,
+                    "Biblioteca o sala de estudio": 1
+                }
+            },
+            "Complejo Deportivo del Campus de Puerto Real": {
+                "Baja": {
                     "Laboratorio o taller": 1
-                },
-                "S\u00f3tano": {
-                    "\u00c1rea de descanso": 1
-                },
-                "Planta 1": {
-                    "Unidades o servicios": 1,
-                    "Despacho": 1
+                }
+            },
+            "Facultad de Ciencias de la Educaci\u00f3n": {
+                "Baja": {
+                    "Cafeter\u00eda, fuente o m\u00e1quina": 1
                 }
             }
         },
         "C\u00e1diz": {
-            "Facultad de Enfermer\u00eda y Fisioterapia": {
-                "Baja": {
-                    "Unidades o servicios": 1
-                }
-            },
-            "Colegio Mayor": {
-                "Planta 2": {
-                    "Biblioteca o sala de estudio": 2
-                }
-            },
             "null": {
                 "Baja": {
-                    "": 1
-                }
-            }
-        },
-        "Jerez": {
-            "Aulario Carmelo Garc\u00eda Barroso": {
-                "Planta 7": {
-                    "Unidades o servicios": 1
+                    "Sal\u00f3n de Actos o de Grado": 2
                 }
             },
-            "Aulario del Campus de Jerez": {
-                "Planta 6": {
-                    "Laboratorio o taller": 1
-                }
-            }
-        },
-        "Bah\u00eda de Algeciras": {
-            "Edificio I+D+i": {
+            "Facultad de Enfermer\u00eda y Fisioterapia": {
                 "Baja": {
                     "Despacho": 1
                 }
             }
         },
-        "null": {
-            "null": {
-                "Planta 6": {
-                    "": 1
-                },
+        "Bah\u00eda de Algeciras": {
+            "Escuela T\u00e9cnica Superior de Ingenier\u00eda de Algeciras (ETSIA)": {
                 "Baja": {
-                    "": 3
-                },
-                "Planta 2": {
-                    "": 2
-                },
-                "S\u00f3tano": {
-                    "": 3
-                },
-                "Planta 1": {
-                    "": 2
-                },
-                "Planta 7": {
-                    "": 1
-                }
-            }
-        },
-        "null": {
-            "null": {
-                "Planta 2": {
-                    "": 2
-                },
-                "S\u00f3tano": {
-                    "": 3
-                },
-                "Planta 1": {
-                    "": 2
-                },
-                "Baja": {
-                    "": 2
-                },
-                "Planta 7": {
-                    "": 1
+                    "Cafeter\u00eda, fuente o m\u00e1quina": 1
                 }
             }
         }
