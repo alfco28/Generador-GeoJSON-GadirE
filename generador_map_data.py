@@ -361,21 +361,25 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
         codigo_planta = planta_codes.get(planta, "00")
         codigo_tipo = tipo_codes_num.get(tipo, "00")
 
-        # Incrementar el contador de ID para este grupo
-        id_counter[campus][edificio][planta][tipo] += 1
-        id_num = id_counter[campus][edificio][planta][tipo]
+        # Solo crear el feature si campus y edificio son conocidos:
+        # inferir_campus() e inferir_edificio() devuelven None cuando no
+        # localizan el punto, y "Desconocido" es lo que queda grabado en los
+        # features antiguos, así que hay que excluir ambos valores
+        if campus not in (None, "Desconocido") and edificio not in (None, "Desconocido"):
+            # Incrementar el contador de ID solo para los features creadados
+            # (así las filas excluidas no consumen números de idnum)
+            id_counter[campus][edificio][planta][tipo] += 1
+            id_num = id_counter[campus][edificio][planta][tipo]
 
-        # Formatear el ID
-        id_formateado = f"{codigo_campus}{codigo_edificio}{codigo_planta}{codigo_tipo}{id_num:02d}"
+            # Formatear el ID
+            id_formateado = f"{codigo_campus}{codigo_edificio}{codigo_planta}{codigo_tipo}{id_num:02d}"
 
-        # Solo crear el feature si campus y edificio no son "Desconocido"
-        if campus != "Desconocido" and edificio != "Desconocido":
             planta_value = planta
             if planta in ["Baja", "Sótano"]:
                 planta_value = planta.lower()
             else:
                 planta_value = planta.split()[-1]
-    
+
             feature = {
                 "type": "Feature",
                 "properties": {
@@ -394,9 +398,11 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
                     "coordinates": [longitud_redondeada, latitud_redondeada]
                 }
             }
-    
+
             features_nuevos.append(feature)
-            ultima_fila = i  # Actualizar la última fila procesada
+
+        # La fila queda procesada (aunque se haya excluido) para no reexaminarla en cada ejecución
+        ultima_fila = i  # Actualizar la última fila procesada
 
     # Combinar features antiguos y nuevos
     features_combinados = features_antiguos + features_nuevos
