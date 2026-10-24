@@ -1,57 +1,89 @@
-Timestamp,Nombre del lugar,Descripción,Enlace,Planta,Coordenadas: latitud,Coordenadas: longitud,Mérito,Correo UCA,Nombre y apellido/s,Protección de datos,Revisado,Aprobado,Tipo
-14/01/2026 13:21:36,Delegación de Estudiantes de la Facultad de Ciencias,,,Baja,36.53139634,-6.211566925,,,,,Sí,Sí,Representación de estudiantes
-14/01/2026 13:22:55,Decanato de la Facultad de Ciencias,,,Planta 1,36.53180583,-6.211920977,,,,,Sí,Sí,Unidades o servicios
-15/01/2026 12:00:39,Salón de Actos,,,Baja,36.53094528,-6.211817559,,,,,Sí,Revisar manualmente,
-17/01/2026 22:24:48,Estadio Ramón de Carranza ,,,Baja,36.50244864,-6.272825003,,,,,Sí,Sí,Salón de Actos o de Grado
-17/01/2026 22:27:15,Facultad de Enfermería y Fisioterapia ,,,Baja,36.50825585,-6.278477311,,,,,Sí,Sí,Despacho
-26/01/2026 08:01:23,Punto del Consorcio,Punto de recarga de tarjetas del Consorcio de Transportes,,Baja,36.53741378,-6.201585831,,,,,Sí,Sí,Transporte
-17/02/2026 08:53:02,Cementerio,Al lao de la ESI,https://entrepiedrasycipreses.com/cementerio-puerto-real/,Sótano,36.54195973,-6.199647188,,,,,Sí,No,
-17/02/2026 08:54:35,La cucharacha,Playa bonita con vistas al mar,https://www.andalucia.org/listing/playa-la-cachucha/18748102/,Baja,36.5254707,-6.184573174,,,,,Sí,No,
-17/02/2026 09:00:56,Tajo Ronda,"Tajo de Ronda, lugar turístico de interés",https://www.andalucia.org/listing/tajo-de-ronda/18358102/,Planta 1,36.74072473,-5.165905058,,,,,Sí,Revisar manualmente,
-17/02/2026 09:02:14,Casa,La puta casa,www.alfonso.com,Planta 1,36.6447404,-6.34812355,,,,,Sí,No,
-17/02/2026 09:24:56,Hacen collares,,,Planta 7,36.52810747,-6.214206219,Sí,uca.es,,Acepto,Sí,No,
-17/02/2026 09:29:19,Francia,calle,,Planta 6,36.52693731,-6.209104657,,,,,Sí,No,
-17/02/2026 09:46:00,Abrazo_del_oso,Abrazo_free,,Baja,36.53053223,-6.305532753,Sí,pedro.garciamorales@alum.uca.es,,Acepto,Sí,Revisar manualmente,
-17/02/2026 10:47:53,Ubicación secreta CEUCA,Edificio secreto de espionaje e inteligencia,ceuca.uca.es,Baja,36.6635469,-5.484868,,,,,Sí,No,
-18/02/2026 15:55:40,Otro sitio más,,,Planta 2,36.53432956,-6.206288338,,,,,Sí,Revisar manualmente,
-18/02/2026 16:06:46,Otro sitio más 2,,,Planta 2,36.51929373,-6.222724915,,,,,Sí,Revisar manualmente,
-18/02/2026 19:57:46,in FC,,,Planta 4,36.53126918,-6.211459637,,,,,Sí,Revisar manualmente,
-18/02/2026 19:58:08,in ESI,,,Planta 2,36.5378036,-6.201835871,,,,,Sí,Revisar manualmente,
-18/02/2026 19:58:34,in PR,,,Planta 2,36.53339853,-6.206159592,,,,,Sí,Revisar manualmente,
-21/02/2026 10:04:04,AC5,,,Baja,36.52983378,-6.213475317,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salida de emergencia o punto de encuentro
-21/02/2026 12:48:17,Orfanato llevado por curas,,mishuevos.com,Sótano,36.53534,-6.1844,Sí,Gustavo@uca.es,Gustavo Jiménez Fernández ,Acepto,Sí,No,
-21/02/2026 12:54:40,Casa de las cariñosas,Fruticlub,,Sótano,36.60750535,-6.232160926,Sí,pablofpradar@uca.es,Poldex,Acepto,Sí,No,
-21/02/2026 12:56:09,Lugar de corridas,Plaza de toros,,Planta 1,36.59690829,-6.232798576,Sí,pablofpradar@uca.es,Poldex,Acepto,Sí,No,
-21/02/2026 12:57:28,Plaia nudista,Domingas a rutiplen,,Baja,36.57599902,-6.226888657,,,,,Sí,No,
-21/02/2026 12:57:42,Este sitio no es válido ,Es el mejor lugar de la UCA ,celestial.es,Planta 1,36.8,-6.0095947,,,,,Sí,No,
-21/02/2026 13:02:10,Los mejores bocadillos,"Apesta a culo de mono putrefacto, no lo recomiendo",polla.com,Planta 7,36.35,-6.189,,,,,Sí,No,
-21/02/2026 13:14:35,Aula Samaritanas del amor,Aula de religión y filosofía ,,Planta 2,36.53049329,-6.20382607,,,,,Sí,No,
-21/02/2026 13:15:25,Facultad de Cariñosas,,,Baja,36.52983809,-6.204732656,,,,,Sí,No,
-21/02/2026 13:20:07,Perro Sanxe tus mu3rt0s,,,Sótano,36.52894149,-6.204507351,,,,,Sí,No,
-21/02/2026 14:29:43,Biblioteca del Campus de Puerto Real,,,Baja,36.52849103,-6.212780625,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Biblioteca o sala de estudio
-21/02/2026 14:30:36,Complejo Deportivo del Campus de Puerto Real,,,Baja,36.5286613,-6.210602671,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Laboratorio o taller
-21/02/2026 14:31:37,Cafetería de la Facultad de Ciencias de la Educación,,,Baja,36.52837033,-6.214530766,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,"Cafetería, fuente o máquina"
-21/02/2026 14:32:50,Punto de carga de VE,Punto de carga de vehículo eléctrico,,Baja,36.53121314,-6.210778356,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Transporte
-21/02/2026 14:33:41,Salón de Actos de la ESI,,,Baja,36.53726267,-6.201654822,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salón de Actos o de Grado
-21/02/2026 14:34:19,Cafetería de la ESI,,,Planta 1,36.53741676,-6.201605201,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,"Cafetería, fuente o máquina"
-21/02/2026 14:34:54,Dirección de la ESI,,,Planta 1,36.5375299,-6.201556921,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Unidades o servicios
-21/02/2026 14:35:41,Punto de carga de VE de la ESI,,,Baja,36.53645559,-6.201760769,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Transporte
-21/02/2026 14:36:41,Aparcamiento de bicicletas,,,Baja,36.53759887,-6.202739775,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Transporte
-21/02/2026 14:39:03,FC5,,,Baja,36.53091895,-6.211435497,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salida de emergencia o punto de encuentro
-21/02/2026 14:40:32,Sala de estudio de la Facultad de Ciencias,,,Baja,36.53117651,-6.21119678,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Biblioteca o sala de estudio
-21/02/2026 17:56:31,New Palace,Lugar de cariñosas,,Planta 1,36.60751718,-6.232177019,Sí,javier.mateorodri@alum.uca.es,Javier Mateo ,Acepto,Sí,No,
-21/02/2026 17:59:16,Gozo y lujuria ,Lugar de pecado ,,Sótano,36.54513419,-6.279900361,Sí,javier.mateorodri@alum.uca.es,Javier Mateo ,Acepto,Sí,No,
-22/02/2026 19:05:58,Gran Teatro Falla,Aquí se celebra el COAC,,Baja,36.53382957,-6.302357018,,,,,Sí,Sí,Salón de Actos o de Grado
-23/02/2026 16:12:28,Cafetería de la ETSIA,,,Baja,36.13667227,-5.45344134,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,"Cafetería, fuente o máquina"
-03/03/2026 08:04:38,Cuarto de baño,,,Baja,36.53092492,-6.211698045,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aseo o vestuario
-03/03/2026 08:06:18,FC4,Aula de docencia teórica,,Baja,36.53117729,-6.211712831,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aula
-03/03/2026 08:07:39,Sala de Grados 1,,,Baja,36.53112772,-6.211507108,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salón de Actos o de Grado
-03/03/2026 08:09:01,FC11,Aula de docencia teórica,,Baja,36.53114444,-6.211347697,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aula
-03/03/2026 08:09:58,FC9,Aula de docencia teórica,,Baja,36.53119254,-6.211229395,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aula
-03/03/2026 08:12:16,FC7,Aula de docencia teórica,,Baja,36.53115631,-6.211237667,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aula
-03/03/2026 08:13:55,Sala de estudio,,,Baja,36.53115845,-6.211248387,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Biblioteca o sala de estudio
-03/03/2026 08:15:17,Cuarto de baño,,,Baja,36.53123889,-6.211184139,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aseo o vestuario
-03/03/2026 08:16:07,Fuente de agua,,,Baja,36.53124139,-6.211167804,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,"Cafetería, fuente o máquina"
-03/03/2026 08:18:25,Sala de Grados 2,,,Sótano,36.53116985,-6.211701637,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salón de Actos o de Grado
-09/04/2026 17:54:56,Fuente de agua,,,Baja,36.5318123,-6.212052405,,,,,Sí,Sí,"Cafetería, fuente o máquina"
-10/04/2026 11:31:53,Pasillo,,,Baja,36.53750943,-6.201602519,,,,,Sí,Sí,Salida de emergencia o punto de encuentro
+Timestamp,Nombre del lugar,Descripción,Enlace,Planta,Coordenadas: latitud,Coordenadas: longitud,Mérito,Correo UCA,Nombre y apellido/s,Protección de datos,Revisado,Aprobado,Tipo,Duplicado de
+24/10/2026 17:36:00,Cafetería CASEM,Abre de 8 a 7,,Baja,36.5298855,-6.212006807,,,,,Sí,No,"Cafetería, fuente o máquina",308100501.0
+22/10/2026 09:41:14,Cuarto de Baño,,,Planta 1,36.53157954,-6.211722493,,,,,Sí,Sí,Aseo o vestuario,
+22/10/2026 09:45:07,Escuela Infantil La Algaida,,,Baja,36.53076054,-6.210606694,,,,,,Sí,,
+22/10/2026 09:47:00,AC16,,,Baja,36.52947456,-6.213355064,,,,,,Sí,,
+22/10/2026 10:07:03,Salida de emergencia,,,Baja,36.52894723,-6.210224032,,,,,,Sí,,
+22/10/2026 10:07:32,Microondas,,,Baja,36.52826903,-6.214452982,,,,,Sí,No,,
+22/10/2026 10:09:18,Recarga del Consorcio de Transporte,Punto de recarga de tarjetas del Consorcio de Transporte,,Baja,36.53012258,-6.21165812,,,,,Sí,Sí,Transporte,
+22/10/2026 10:09:48,Conserjería,,,Baja,36.53118728,-6.211915612,,,,,Sí,Sí,Unidades o servicios,
+22/10/2026 10:10:12,Cafetería,,,Baja,36.53101055,-6.211974621,,,,,,Sí,,
+22/10/2026 10:11:21,Punto de carga de VE,Punto de carga de vehículo eléctrico,,Baja,36.52965273,-6.211642027,,,,,Sí,Sí,Laboratorio o taller,
+22/10/2026 10:12:01,Punto de carga de VE,Punto de carga de vehículo eléctrico,,Baja,36.52801039,-6.211329103,,,,,Sí,Sí,Laboratorio o taller,
+22/10/2026 10:23:37,Cafetería CASEM ,,,Baja,36.52982372,-6.212081909,Sí,Hugo.bozagavino@alum.uca.es,Hugo Boza Gaviño,Acepto,Sí,No,"Cafetería, fuente o máquina",
+22/10/2026 10:25:53,Cafetería Ciencias,,,Baja,36.53091859,-6.211979985,Sí,Hugo.bozagavino@alum.uca.es,Hugo Boza  Gaviño,Acepto,Sí,Sí,"Cafetería, fuente o máquina",
+22/10/2026 10:27:05,Copistería CASEM,,,Sótano,36.53018437,-6.211593747,Sí,Hugo.bozagavino@alum.uca.es,Hugo Boza Gaviño,Acepto,Sí,Sí,Unidades o servicios,
+22/10/2026 10:38:16,FC2,,,Baja,36.53104935,-6.212232113,,,,,Sí,Sí,Salida de emergencia o punto de encuentro,
+22/10/2026 10:42:22,Alfonso quejica,Alfonso se queja mucho,,Baja,36.53178653,-6.211813688,,,,,Sí,No,,
+22/10/2026 13:47:28,La Cachucha,Intento de Playa,,Baja,36.52517492,-6.184322357,Sí,pablo.lealfernandez@alum.uca.es,Pablo Leal Fernández,Acepto,Sí,No,,
+22/10/2026 14:02:08,Mi kasa,Es mi kasa,,Baja,36.49667403,-6.270594634,,,,,Sí,No,,
+22/10/2026 15:00:04,Secretaría CASEM,,,Baja,36.53005218,-6.21165812,Sí,Hugo.bozagavino@alum.uca.es,Hugo Boza Gaviño,Acepto,Sí,Sí,Unidades o servicios,
+22/10/2026 15:02:00,JP Financial Estadio ,Estadio de fútbol ,,Baja,36.50272278,-6.273043156,Sí,Hugo.bozagavino@alum.uca.es,Hugo Boza Gaviño,Acepto,Sí,No,,
+22/10/2026 15:05:57,"Conservatorio Profesional de Danza ""Maribel Gallardo""","Estudios de danza (danza clásica, danza contemporánea, danza española y flamenco)",,Baja,36.52263846,-6.279202346,Sí,ale.montero@alum.uca.es,Alejandra,Acepto,Sí,Sí,Laboratorio o taller,
+22/10/2026 15:07:38,Aula de pesca,Es un aula con enchufes,https://tablademareas.com/es/cadiz/cadiz/prevision/pesca/amp,Baja,36.52968306,-6.213581711,Sí,alicia.leonramirez@alum.uca.es,Alicia ,Acepto,Sí,Sí,Aula,
+22/10/2026 15:08:50,"Conservatorio Profesional de Música ""Manuel de Falla""",Estudios elementales y profesionales de música,,Baja,36.52247109,-6.278922558,Sí,ale.montero@alum.uca.es,Alejandra,Acepto,Sí,Sí,Aula,
+22/10/2026 20:08:54,Fuente de agua,,,Baja,36.52846444,-6.212886572,,,,,Sí,Sí,"Cafetería, fuente o máquina",
+22/10/2026 20:09:54,Aula de docencia,,,Baja,36.52818713,-6.21113956,,,,,Sí,No,,
+21/10/2026 19:59:44,Piscina del Campus de Puerto Real,Piscina cubierta de 25 metros de largo con 6 calles.,,Baja,36.52877768,-6.210461855,,,,,Sí,Sí,Salón de Actos o de Grado,
+21/10/2026 21:34:07,Punto de carga de VE,,,Baja,36.52870584,-6.214161515,,,,,,Sí,,
+11/10/2026 11:44:02,hola,,,Planta 4,36.53056226,-6.211722493,,,,,Sí,No,,
+24/09/2026 00:51:36,CASA DE ALFONSO,Picadero para pinchar,,Baja,36.59756771,-6.227686642,Sí,Alfonsobujarrilla@almun.uca.es,Puedro,Acepto,Sí,No,,
+10/04/2026 11:31:53,Pasillo,,,Baja,36.53750943,-6.201602519,,,,,Sí,No,,
+11/04/2026 00:32:52,Sala de Juntas,,,Planta 1,36.53865807,-6.202350855,,,,,,Sí,,
+10/04/2026 23:43:28,Cafetería del CASEM,,,Baja,36.52993508,-6.2121436,,,,,Sí,Sí,"Cafetería, fuente o máquina",
+10/04/2026 21:52:46,Cuarto de baño,,,Baja,36.53102241,-6.212154329,,,,,,Sí,,
+14/01/2026 13:21:36,Delegación de Estudiantes de la Facultad de Ciencias,,,Baja,36.53139634,-6.211566925,,,,,Sí,Sí,Representación de estudiantes,
+14/01/2026 13:22:55,Decanato de la Facultad de Ciencias,,,Planta 1,36.53180583,-6.211920977,,,,,Sí,Sí,Unidades o servicios,
+15/01/2026 12:00:39,Salón de Actos,,,Baja,36.53094528,-6.211817559,,,,,Sí,Sí,Salón de Actos o de Grado,
+17/01/2026 22:24:48,Estadio Ramón de Carranza ,,,Baja,36.50244864,-6.272825003,,,,,Sí,No,,
+17/01/2026 22:27:15,Facultad de Enfermería y Fisioterapia ,,,Baja,36.50825585,-6.278477311,,,,,Sí,Sí,Despacho,
+26/01/2026 08:01:23,Punto del Consorcio,Punto de recarga de tarjetas del Consorcio de Transportes,,Baja,36.53741378,-6.201585831,,,,,Sí,Sí,Transporte,
+17/02/2026 08:53:02,Cementerio,Al lao de la ESI,https://entrepiedrasycipreses.com/cementerio-puerto-real/,Sótano,36.54195973,-6.199647188,,,,,Sí,No,,
+17/02/2026 08:54:35,La cucharacha,Playa bonita con vistas al mar,https://www.andalucia.org/listing/playa-la-cachucha/18748102/,Baja,36.5254707,-6.184573174,,,,,Sí,No,,
+17/02/2026 09:00:56,Tajo Ronda,"Tajo de Ronda, lugar turístico de interés",https://www.andalucia.org/listing/tajo-de-ronda/18358102/,Planta 1,36.74072473,-5.165905058,,,,,Sí,No,,
+17/02/2026 09:02:14,Casa,La puta casa,www.alfonso.com,Planta 1,36.6447404,-6.34812355,,,,,Sí,No,,
+17/02/2026 09:24:56,Hacen collares,,,Planta 7,36.52810747,-6.214206219,Sí,uca.es,,Acepto,Sí,No,,
+17/02/2026 09:29:19,Francia,calle,,Planta 6,36.52693731,-6.209104657,,,,,Sí,No,,
+17/02/2026 09:46:00,Abrazo_del_oso,Abrazo_free,,Baja,36.53053223,-6.305532753,Sí,pedro.garciamorales@alum.uca.es,,Acepto,Sí,No,,
+17/02/2026 10:47:53,Ubicación secreta CEUCA,Edificio secreto de espionaje e inteligencia,ceuca.uca.es,Baja,36.6635469,-5.484868,,,,,Sí,No,,
+18/02/2026 15:55:40,Otro sitio más,,,Planta 2,36.53432956,-6.206288338,,,,,Sí,No,,
+18/02/2026 16:06:46,Otro sitio más 2,,,Planta 2,36.51929373,-6.222724915,,,,,Sí,No,,
+18/02/2026 19:57:46,in FC,,,Planta 4,36.53126918,-6.211459637,,,,,Sí,No,,
+18/02/2026 19:58:08,in ESI,,,Planta 2,36.5378036,-6.201835871,,,,,Sí,No,,
+18/02/2026 19:58:34,in PR,,,Planta 2,36.53339853,-6.206159592,,,,,Sí,No,,
+21/02/2026 10:04:04,AC5,,,Baja,36.52983378,-6.213475317,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salida de emergencia o punto de encuentro,
+21/02/2026 12:48:17,Orfanato llevado por curas,,mishuevos.com,Sótano,36.53534,-6.1844,Sí,Gustavo@uca.es,Gustavo Jiménez Fernández ,Acepto,Sí,No,,
+21/02/2026 12:54:40,Casa de las cariñosas,Fruticlub,,Sótano,36.60750535,-6.232160926,Sí,pablofpradar@uca.es,Poldex,Acepto,Sí,No,,
+21/02/2026 12:56:09,Lugar de corridas,Plaza de toros,,Planta 1,36.59690829,-6.232798576,Sí,pablofpradar@uca.es,Poldex,Acepto,Sí,No,,
+21/02/2026 12:57:28,Plaia nudista,Domingas a rutiplen,,Baja,36.57599902,-6.226888657,,,,,Sí,No,,
+21/02/2026 12:57:42,Este sitio no es válido ,Es el mejor lugar de la UCA ,celestial.es,Planta 1,36.8,-6.0095947,,,,,Sí,No,,
+21/02/2026 13:02:10,Los mejores bocadillos,"Apesta a culo de mono putrefacto, no lo recomiendo",polla.com,Planta 7,36.35,-6.189,,,,,Sí,No,,
+21/02/2026 13:14:35,Aula Samaritanas del amor,Aula de religión y filosofía ,,Planta 2,36.53049329,-6.20382607,,,,,Sí,No,,
+21/02/2026 13:15:25,Facultad de Cariñosas,,,Baja,36.52983809,-6.204732656,,,,,Sí,No,,
+21/02/2026 13:20:07,Perro Sanxe tus mu3rt0s,,,Sótano,36.52894149,-6.204507351,,,,,Sí,No,,
+21/02/2026 14:29:43,Biblioteca del Campus de Puerto Real,,,Baja,36.52849103,-6.212780625,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Biblioteca o sala de estudio,
+21/02/2026 14:30:36,Complejo Deportivo del Campus de Puerto Real,,,Baja,36.5286613,-6.210602671,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Laboratorio o taller,
+21/02/2026 14:31:37,Cafetería de la Facultad de Ciencias de la Educación,,,Baja,36.52837033,-6.214530766,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,"Cafetería, fuente o máquina",
+21/02/2026 14:32:50,Punto de carga de VE,Punto de carga de vehículo eléctrico,,Baja,36.53121314,-6.210778356,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Transporte,
+21/02/2026 14:33:41,Salón de Actos de la ESI,,,Baja,36.53726267,-6.201654822,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salón de Actos o de Grado,
+21/02/2026 14:34:19,Cafetería de la ESI,,,Planta 1,36.53741676,-6.201605201,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,"Cafetería, fuente o máquina",
+21/02/2026 14:34:54,Dirección de la ESI,,,Planta 1,36.5375299,-6.201556921,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Unidades o servicios,
+21/02/2026 14:35:41,Punto de carga de VE de la ESI,,,Baja,36.53645559,-6.201760769,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Transporte,
+21/02/2026 14:36:41,Aparcamiento de bicicletas,,,Baja,36.53759887,-6.202739775,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Transporte,
+21/02/2026 14:39:03,FC5,,,Baja,36.53091895,-6.211435497,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salida de emergencia o punto de encuentro,
+21/02/2026 14:40:32,Sala de estudio de la Facultad de Ciencias,,,Baja,36.53117651,-6.21119678,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Biblioteca o sala de estudio,
+21/02/2026 17:56:31,New Palace,Lugar de cariñosas,,Planta 1,36.60751718,-6.232177019,Sí,javier.mateorodri@alum.uca.es,Javier Mateo ,Acepto,Sí,No,,
+21/02/2026 17:59:16,Gozo y lujuria ,Lugar de pecado ,,Sótano,36.54513419,-6.279900361,Sí,javier.mateorodri@alum.uca.es,Javier Mateo ,Acepto,Sí,No,,
+22/02/2026 19:05:58,Gran Teatro Falla,Aquí se celebra el COAC,,Baja,36.53382957,-6.302357018,,,,,Sí,No,Salón de Actos o de Grado,
+23/02/2026 16:12:28,Cafetería de la ETSIA,,,Baja,36.13667227,-5.45344134,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,"Cafetería, fuente o máquina",
+03/03/2026 08:04:38,Cuarto de baño,,,Baja,36.53092492,-6.211698045,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aseo o vestuario,
+03/03/2026 08:06:18,FC4,Aula de docencia teórica,,Baja,36.53117729,-6.211712831,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aula,
+03/03/2026 08:07:39,Sala de Grados 1,,,Baja,36.53112772,-6.211507108,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salón de Actos o de Grado,
+03/03/2026 08:09:01,FC11,Aula de docencia teórica,,Baja,36.53114444,-6.211347697,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aula,
+03/03/2026 08:09:58,FC9,Aula de docencia teórica,,Baja,36.53119254,-6.211229395,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aula,
+03/03/2026 08:12:16,FC7,Aula de docencia teórica,,Baja,36.53115631,-6.211237667,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aula,
+03/03/2026 08:13:55,Sala de estudio,,,Baja,36.53115845,-6.211248387,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Biblioteca o sala de estudio,
+03/03/2026 08:15:17,Cuarto de baño,,,Baja,36.53123889,-6.211184139,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Aseo o vestuario,
+03/03/2026 08:16:07,Fuente de agua,,,Baja,36.53124139,-6.211167804,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,,Sí,"Cafetería, fuente o máquina",
+03/03/2026 08:18:25,Sala de Grados 2,,,Sótano,36.53116985,-6.211701637,Sí,alfonsofrancisco.gilgonzalez@alum.uca.es,Alfonso Francisco Gil González,Acepto,Sí,Sí,Salón de Actos o de Grado,
+09/04/2026 17:54:56,Fuente de agua,,,Baja,36.5318123,-6.212052405,,,,,Sí,Sí,"Cafetería, fuente o máquina",

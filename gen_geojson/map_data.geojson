@@ -26,48 +26,6 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
-        "nombre": "Estadio Ramón de Carranza ",
-        "descrip": "",
-        "enlace": "",
-        "tipo": "salon",
-        "planta": "baja",
-        "edificio": "Desconocido",
-        "campus": "Cádiz",
-        "idnum": "000101001"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.272825,
-          36.502449
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "Gran Teatro Falla",
-        "descrip": "Aquí se celebra el COAC",
-        "enlace": "",
-        "tipo": "salon",
-        "planta": "baja",
-        "edificio": "Desconocido",
-        "campus": "Cádiz",
-        "idnum": "000101002"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.302357,
-          36.53383
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
         "nombre": "Facultad de Enfermería y Fisioterapia ",
         "descrip": "",
         "enlace": "",
@@ -82,6 +40,27 @@
         "coordinates": [
           -6.278477,
           36.508256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Aula de pesca",
+        "descrip": "Es un aula con enchufes",
+        "enlace": "https://tablademareas.com/es/cadiz/cadiz/prevision/pesca/amp",
+        "tipo": "aula",
+        "planta": "baja",
+        "edificio": "Aulario Norte del Campus de Puerto Real",
+        "campus": "Puerto Real",
+        "idnum": "303100301"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.213582,
+          36.529683
         ]
       }
     },
@@ -131,8 +110,134 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
-        "nombre": "Complejo Deportivo del Campus de Puerto Real",
+        "nombre": "Fuente de agua",
         "descrip": "",
+        "enlace": "",
+        "tipo": "cafete",
+        "planta": "baja",
+        "edificio": "Biblioteca del Campus de Puerto Real",
+        "campus": "Puerto Real",
+        "idnum": "307100501"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.212887,
+          36.528464
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Cafetería del CASEM",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "cafete",
+        "planta": "baja",
+        "edificio": "Centro Andaluz Superior de Estudios Marinos (CASEM)",
+        "campus": "Puerto Real",
+        "idnum": "308100502"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.212144,
+          36.529935
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Punto de carga de VE",
+        "descrip": "Punto de carga de vehículo eléctrico",
+        "enlace": "",
+        "tipo": "lab",
+        "planta": "baja",
+        "edificio": "Centro Andaluz Superior de Estudios Marinos (CASEM)",
+        "campus": "Puerto Real",
+        "idnum": "308100701"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211642,
+          36.529653
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Recarga del Consorcio de Transporte",
+        "descrip": "Punto de recarga de tarjetas del Consorcio de Transporte",
+        "enlace": "",
+        "tipo": "transporte",
+        "planta": "baja",
+        "edificio": "Centro Andaluz Superior de Estudios Marinos (CASEM)",
+        "campus": "Puerto Real",
+        "idnum": "308101101"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211658,
+          36.530123
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Secretaría CASEM",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "unidad",
+        "planta": "baja",
+        "edificio": "Centro Andaluz Superior de Estudios Marinos (CASEM)",
+        "campus": "Puerto Real",
+        "idnum": "308101201"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211658,
+          36.530052
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Copistería CASEM",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "unidad",
+        "planta": "sótano",
+        "edificio": "Centro Andaluz Superior de Estudios Marinos (CASEM)",
+        "campus": "Puerto Real",
+        "idnum": "308111201"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211594,
+          36.530184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Punto de carga de VE",
+        "descrip": "Punto de carga de vehículo eléctrico",
         "enlace": "",
         "tipo": "lab",
         "planta": "baja",
@@ -143,8 +248,50 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -6.211329,
+          36.52801
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Complejo Deportivo del Campus de Puerto Real",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "lab",
+        "planta": "baja",
+        "edificio": "Complejo Deportivo del Campus de Puerto Real",
+        "campus": "Puerto Real",
+        "idnum": "312100702"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -6.210603,
           36.528661
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Piscina del Campus de Puerto Real",
+        "descrip": "Piscina cubierta de 25 metros de largo con 6 calles.",
+        "enlace": "",
+        "tipo": "salon",
+        "planta": "baja",
+        "edificio": "Complejo Deportivo del Campus de Puerto Real",
+        "campus": "Puerto Real",
+        "idnum": "312101001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.210462,
+          36.528778
         ]
       }
     },
@@ -187,27 +334,6 @@
         "coordinates": [
           -6.201557,
           36.53753
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "Pasillo",
-        "descrip": "",
-        "enlace": "",
-        "tipo": "emergencia",
-        "planta": "baja",
-        "edificio": "Escuela Superior de Ingeniería (ESI)",
-        "campus": "Puerto Real",
-        "idnum": "328100901"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.201603,
-          36.537509
         ]
       }
     },
@@ -299,6 +425,27 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
+        "nombre": "Cuarto de Baño",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "aseo",
+        "planta": "1",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330000201"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211722,
+          36.53158
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
         "nombre": "Decanato de la Facultad de Ciencias",
         "descrip": "",
         "enlace": "",
@@ -313,48 +460,6 @@
         "coordinates": [
           -6.211921,
           36.531806
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "Cuarto de baño",
-        "descrip": "",
-        "enlace": "",
-        "tipo": "aseo",
-        "planta": "baja",
-        "edificio": "Facultad de Ciencias",
-        "campus": "Puerto Real",
-        "idnum": "330100201"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.211698,
-          36.530925
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "clase": "espacio",
-        "nombre": "Cuarto de baño",
-        "descrip": "",
-        "enlace": "",
-        "tipo": "aseo",
-        "planta": "baja",
-        "edificio": "Facultad de Ciencias",
-        "campus": "Puerto Real",
-        "idnum": "330100202"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.211184,
-          36.531239
         ]
       }
     },
@@ -446,6 +551,48 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
+        "nombre": "Cuarto de baño",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "aseo",
+        "planta": "baja",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330100201"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211698,
+          36.530925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Cuarto de baño",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "aseo",
+        "planta": "baja",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330100202"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211184,
+          36.531239
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
         "nombre": "Sala de estudio de la Facultad de Ciencias",
         "descrip": "",
         "enlace": "",
@@ -488,7 +635,7 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
-        "nombre": "Fuente de agua",
+        "nombre": "Cafetería Ciencias",
         "descrip": "",
         "enlace": "",
         "tipo": "cafete",
@@ -500,8 +647,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -6.211168,
-          36.531241
+          -6.21198,
+          36.530919
         ]
       }
     },
@@ -530,7 +677,7 @@
       "type": "Feature",
       "properties": {
         "clase": "espacio",
-        "nombre": "FC5",
+        "nombre": "FC2",
         "descrip": "",
         "enlace": "",
         "tipo": "emergencia",
@@ -542,8 +689,71 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -6.212232,
+          36.531049
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "FC5",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "emergencia",
+        "planta": "baja",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330100902"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -6.211435,
           36.530919
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Delegación de Estudiantes de la Facultad de Ciencias",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "repre",
+        "planta": "baja",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330100801"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211567,
+          36.531396
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Salón de Actos",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "salon",
+        "planta": "baja",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330101001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211818,
+          36.530945
         ]
       }
     },
@@ -558,7 +768,7 @@
         "planta": "baja",
         "edificio": "Facultad de Ciencias",
         "campus": "Puerto Real",
-        "idnum": "330101001"
+        "idnum": "330101002"
       },
       "geometry": {
         "type": "Point",
@@ -586,6 +796,27 @@
         "coordinates": [
           -6.210778,
           36.531213
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "clase": "espacio",
+        "nombre": "Conserjería",
+        "descrip": "",
+        "enlace": "",
+        "tipo": "unidad",
+        "planta": "baja",
+        "edificio": "Facultad de Ciencias",
+        "campus": "Puerto Real",
+        "idnum": "330101201"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.211916,
+          36.531187
         ]
       }
     },
