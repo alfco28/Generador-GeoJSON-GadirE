@@ -4,8 +4,11 @@ import csv
 import json
 import os
 from collections import defaultdict
+from datetime import datetime
 import geopandas as gpd
 from shapely.geometry import Point
+
+import dedup
 
 # %%
 #Definición de edificios que conforman cada campus para posterior inferencia del campus a partir del edificio
@@ -192,7 +195,7 @@ def cargar_log(ruta_log):
         # también se ha borrado map_data.geojson para regenerar de cero
         return {"procesados": [], "id_counter": {}}
 
-def guardar_log(ruta_log, procesados, id_counter):
+def guardar_log(ruta_log, procesados, id_counter, fusiones=None, avisos=None):
     # Convertir defaultdict a dict normal para guardar en JSON
     id_counter_dict = {}
     for campus, edificios in id_counter.items():
@@ -207,7 +210,12 @@ def guardar_log(ruta_log, procesados, id_counter):
     with open(ruta_log, 'w', encoding='utf-8') as f:
         json.dump({
             "procesados": sorted(procesados),
-            "id_counter": id_counter_dict
+            "id_counter": id_counter_dict,
+            # Auditoría de la deduplicación: fusiones realizadas y avisos de
+            # posibles duplicados NO fusionados (por distancia). Claves nuevas,
+            # compatibles hacia atrás (los logs antiguos no las traen)
+            "fusiones": fusiones or [],
+            "avisos_duplicados": avisos or []
         }, f, indent=4)
 
 # %%
@@ -306,6 +314,9 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
         raise SystemExit("log.json con formato antiguo: borra log.json y map_data.geojson (juntos) y vuelve a ejecutar.")
     # Timestamps de los aportes que ya tienen su feature publicado
     procesados = set(log.get("procesados", []))
+    # Auditoría de la deduplicación (claves nuevas: los logs sin ellas dan [])
+    fusiones = list(log.get("fusiones", []))
+    avisos_duplicados = list(log.get("avisos_duplicados", []))
     id_counter = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))
 
     # Cargar el contador de IDs desde el log
@@ -322,6 +333,20 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
             geojson_existente = json.load(f)
             features_antiguos = geojson_existente.get("features", [])
 
+    # Índices para la deduplicación: por grupo (campus, edificio, planta), por
+    # idnum (marcas "Duplicado de" de features publicadas) y por Timestamp (marcas
+    # de gemelos creados en esta misma ejecución). Las fusiones mutan las
+    # features in situ, así que los índices siempre ven el estado actualizado.
+    features_por_grupo = {}
+    features_por_idnum = {}
+    features_por_timestamp = {}
+    for feature in features_antiguos:
+        props = feature.get("properties", {})
+        grupo = (props.get("campus"), props.get("edificio"), dedup.normalizar_planta(props.get("planta")))
+        features_por_grupo.setdefault(grupo, []).append(feature)
+        if props.get("idnum"):
+            features_por_idnum[props["idnum"]] = feature
+
     # Procesar las filas del CSV cuyo Timestamp no esté publicado aún.
     # Las no aprobadas no se marcan como procesadas: se reexaminan en cada
     # ejecución (es barato, aquí no hay LLM), de modo que si Alfonso aprueba
@@ -331,6 +356,19 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
     with open(ruta_csv, mode='r', encoding='utf-8') as archivo_csv:
         lector_csv = csv.DictReader(archivo_csv)
         filas = list(lector_csv)
+
+    # Orden cronológico por Timestamp (dd/mm/aaaa hh:mm:ss): la feature "base"
+    # de cada lugar es su primer reporte y las duplicadas se fusionan sobre
+    # ella en orden natural. También hace que la regeneración completa
+    # produzca lo mismo que el incremental haya ido publicando.
+    def clave_cronologica(fila):
+        """Clave de orden: el Timestamp parseado; al final si no se puede parsear."""
+        try:
+            return (0, datetime.strptime(fila.get("Timestamp", "").strip(), "%d/%m/%Y %H:%M:%S"))
+        except ValueError:
+            return (1, datetime.min)  # formato desconocido: conserva el orden relativo
+
+    filas = sorted(filas, key=clave_cronologica)
 
     for fila in filas:
         # Clave única del aporte: el Timestamp del formulario
@@ -389,8 +427,126 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
         # localizan el punto, y "Desconocido" es lo que queda grabado en los
         # features antiguos, así que hay que excluir ambos valores
         if campus not in (None, "Desconocido") and edificio not in (None, "Desconocido"):
+            # ---------------- DEDUPLICACIÓN (fusión aditiva) ----------------
+            # ¿Es este reporte de un punto que ya existe? Si lo es, NO se crea
+            # feature ni idnum nuevo: la información NUEVA se AÑADE al gemelo
+            # (nunca se suprime ni se sustituye nada de lo ya publicado).
+
+            # 1) Marca de adecuacion.py ("Duplicado de"): el idnum del gemelo
+            #    publicado o el Timestamp del gemelo del lote. La marca se
+            #    verifica SIEMPRE contra el grupo: jamás puede fusionar puntos
+            #    de campus/edificio distintos (o de planta distinta).
+            marca = (fila.get("Duplicado de") or "").strip()
+            objetivo = None
+            if marca:
+                if "/" in marca:
+                    objetivo = features_por_timestamp.get(marca)  # gemelo del lote
+                else:
+                    objetivo = features_por_idnum.get(marca)      # gemelo publicado
+                if objetivo is not None:
+                    props_obj = objetivo["properties"]
+                    planta_obj = dedup.normalizar_planta(props_obj.get("planta"))
+                    planta_fila = dedup.normalizar_planta(planta)
+                    if ((props_obj.get("campus"), props_obj.get("edificio")) != (campus, edificio)
+                            or (planta_fila != "" and planta_obj != planta_fila)):
+                        print(f"    Marca 'Duplicado de {marca}' ignorada para '{nombre_lugar}': el gemelo es de otro campus/edificio/planta")
+                        objetivo = None  # grupo incompatible: la marca se ignora
+
+            # 2) Sin marca (o no resuelta): detección barata R1/R2 con
+            #    confirmación por coordenadas entre los features del grupo
+            if objetivo is None:
+                planta_fila = dedup.normalizar_planta(planta)
+                if planta_fila == "":
+                    # Sin planta declarada: candidatas de cualquier planta del edificio
+                    candidatos_grupo = [f for (c, e, _), fs in features_por_grupo.items()
+                                        if c == campus and e == edificio for f in fs]
+                else:
+                    candidatos_grupo = features_por_grupo.get((campus, edificio, planta_fila), [])
+                candidatos = [
+                    {"nombre": f["properties"].get("nombre") or "",
+                     "lat": f["geometry"]["coordinates"][1],
+                     "lon": f["geometry"]["coordinates"][0],
+                     "feature": f}
+                    for f in candidatos_grupo
+                ]
+                dup, descartados_grupo = dedup.detectar_duplicado(
+                    nombre_lugar, latitud_redondeada, longitud_redondeada, candidatos)
+                if dup is not None:
+                    objetivo = dup["feature"]
+                # Casan por nombre pero quedan lejos: sitios distintos -> aviso
+                for d in descartados_grupo:
+                    idnum_d = d["feature"]["properties"].get("idnum")
+                    avisos_duplicados.append({
+                        "timestamp": timestamp,
+                        "idnum_existente": idnum_d,
+                        "distancia_m": round(d["distancia_m"], 1)
+                    })
+                    print(f"    Aviso dedup: '{nombre_lugar}' casa por nombre con '{d['nombre']}' ({idnum_d}) pero dista {d['distancia_m']:.0f} m: no se fusiona")
+
+            if objetivo is not None:
+                # Fusión ADITIVA sobre el gemelo (índices incluidos: se muta
+                # la feature in situ, así lo guardado siempre es lo vigente)
+                props = objetivo["properties"]
+                campos_actualizados = []
+                conflictos = {}
+
+                # descrip: se añade SOLO si aporta información nueva (si el
+                # texto nuevo ya está contenido en el existente, no se añade)
+                descrip_nueva = (descripcion or "").strip()
+                descrip_actual = (props.get("descrip") or "").strip()
+                if descrip_nueva and dedup.normalizar_nombre(descrip_nueva) not in dedup.normalizar_nombre(descrip_actual):
+                    props["descrip"] = (descrip_actual + " " + descrip_nueva).strip()
+                    campos_actualizados.append("descrip")
+
+                # enlace: solo rellenando el vacío; con ambos llenos y
+                # distintos, conflicto -> se mantiene el existente y queda
+                # en el log para revisión manual
+                enlace_nuevo = (enlace or "").strip()
+                enlace_actual = (props.get("enlace") or "").strip()
+                if enlace_nuevo and not enlace_actual:
+                    props["enlace"] = enlace_nuevo
+                    campos_actualizados.append("enlace")
+                elif enlace_nuevo and enlace_actual and enlace_nuevo != enlace_actual:
+                    conflictos["enlace"] = {"existente": enlace_actual, "nuevo": enlace_nuevo}
+                    print(f"    Conflicto de enlace en {props.get('idnum')}: se mantiene '{enlace_actual}'; el nuevo queda en log.json")
+
+                # tipo: solo rellenando vacío/desconocido (el idnum NUNCA cambia)
+                tipo_nuevo_corto = tipo_codes_str.get((tipo or "").strip(), "")
+                tipo_actual = (props.get("tipo") or "").strip()
+                if tipo_actual in ("", "Desconocido") and tipo_nuevo_corto:
+                    props["tipo"] = tipo_nuevo_corto
+                    campos_actualizados.append("tipo")
+                elif tipo_nuevo_corto and tipo_actual not in ("", "Desconocido") and tipo_nuevo_corto != tipo_actual:
+                    # El tipo del gemelo se mantiene; queda solo constancia
+                    conflictos["tipo"] = {"existente": tipo_actual, "nuevo": tipo_nuevo_corto}
+
+                # coordenadas: solo se rellenan si el gemelo está en (0, 0)
+                coords_obj = objetivo["geometry"]["coordinates"]
+                if not dedup.coords_validas(coords_obj[1], coords_obj[0]) and dedup.coords_validas(latitud_redondeada, longitud_redondeada):
+                    objetivo["geometry"]["coordinates"] = [longitud_redondeada, latitud_redondeada]
+                    campos_actualizados.append("coordenadas")
+
+                # Auditoría de la fusión en log.json
+                fusion = {
+                    "timestamp": timestamp,
+                    "idnum": props.get("idnum"),
+                    "campos_actualizados": campos_actualizados,
+                }
+                if nombre_lugar and nombre_lugar != props.get("nombre"):
+                    fusion["alias"] = nombre_lugar
+                if conflictos:
+                    fusion["conflictos"] = conflictos
+                fusiones.append(fusion)
+                print(f"    Fusión aditiva: '{nombre_lugar}' se incorpora a '{props.get('nombre')}' ({props.get('idnum')}); campos: {campos_actualizados or 'sin cambios'}")
+
+                # El aporte queda procesado: fusionado en el gemelo, no
+                # genera feature ni consume número de idnum
+                procesados.add(timestamp)
+                continue
+
+            # ---------------- Creación del feature (no es duplicado) ----------------
             # Incrementar el contador de ID solo para los features creadados
-            # (así las filas excluidas no consumen números de idnum)
+            # (así las filas excluidas y las fusionadas no consumen idnum)
             id_counter[campus][edificio][planta][tipo] += 1
             id_num = id_counter[campus][edificio][planta][tipo]
 
@@ -423,6 +579,12 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
             }
 
             features_nuevos.append(feature)
+
+            # Registrar el feature en los índices de deduplicación (para las
+            # filas duplicadas que vengan después en este mismo lote)
+            features_por_grupo.setdefault((campus, edificio, dedup.normalizar_planta(planta)), []).append(feature)
+            features_por_idnum[id_formateado] = feature
+            features_por_timestamp[timestamp] = feature
 
             # FIX 24-10: el aporte queda procesado SOLO cuando su feature se
             # ha creado (está publicado). Todo lo demás se reexamina en cada
@@ -463,8 +625,8 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
     with open(ruta_geojson, 'w', encoding='utf-8') as f:
         json.dump(feature_collection, f, indent=4, ensure_ascii=False)
 
-    # Guardar el log actualizado
-    guardar_log(ruta_log, procesados, id_counter)
+    # Guardar el log actualizado (procesados + contadores + auditoría dedup)
+    guardar_log(ruta_log, procesados, id_counter, fusiones, avisos_duplicados)
 
     return feature_collection
 

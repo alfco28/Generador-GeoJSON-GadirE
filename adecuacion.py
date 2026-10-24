@@ -5,6 +5,8 @@ import Levenshtein
 import unidecode
 import string
 
+import dedup
+
 # %%
 # Define los tipos y sus descripciones
 tipos = {
@@ -201,6 +203,21 @@ def procesar_csv(ruta_original, ruta_nuevo):
     # Combinar los datos, priorizando el nuevo CSV
     df_combinado = pd.concat([df_original, df_nuevo]).drop_duplicates(subset=["Timestamp"], keep="last")
 
+    # Columna de deduplicación: SOLO se escribe aquí, en map_data.csv (el CSV
+    # del formulario NUNCA se edita: la próxima descarga lo pisaría). Guarda a
+    # qué gemelo corresponde la fila: el idnum de una feature publicada o el
+    # Timestamp de otra fila del mismo lote.
+    if "Duplicado de" not in df_combinado.columns:
+        df_combinado["Duplicado de"] = ""
+
+    # Features ya publicadas (map_data.geojson), candidatas a duplicado. En
+    # regeneración completa el archivo no existe y devuelve []: las fusiones
+    # las resuelve entonces la detección barata del generador.
+    publicados = dedup.cargar_features_publicados("map_data.geojson")
+
+    # Filas aprobadas en esta ejecución (candidatas a duplicado dentro del lote)
+    lote = []
+
     # Revisar sólo las filas no revisadas (si "Revisado" no es "Sí")
     for idx, row in df_combinado.iterrows():
         print(f"\nRevisando fila {idx}")
@@ -219,16 +236,78 @@ def procesar_csv(ruta_original, ruta_nuevo):
 
             # Clasifica el tipo sólo de las filas aprobadas
             if aprobado == "Sí":
-                # Combina "Nombre del lugar" y "Descripción" (si existe)
-                texto_clasificar = row["Nombre del lugar"]
-                if pd.notna(row.get("Descripción")):
-                    texto_clasificar += f": {row['Descripción']}"
+                # DEDUP ANTES del LLM: si este reporte es de un punto que ya
+                # existe (publicado o reportado antes en este mismo lote), el
+                # tipo del gemelo es el que queda en el mapa: se copia y NO se
+                # gasta la llamada LLM de clasificar_tipo.
+                nombre_lugar = str(row["Nombre del lugar"]) if pd.notna(row["Nombre del lugar"]) else ""
+                planta = str(row["Planta"]) if pd.notna(row.get("Planta")) else ""
+                timestamp = str(row["Timestamp"]) if pd.notna(row.get("Timestamp")) else ""
+                try:
+                    lat = float(row.get("Coordenadas: latitud") or 0)
+                    lon = float(row.get("Coordenadas: longitud") or 0)
+                except (TypeError, ValueError):
+                    lat, lon = 0.0, 0.0
 
-                # Clasifica el texto
-                print(f"        Ejecutando LLM para asignar el tipo a la fila {idx}")
-                tipo = clasificar_tipo(texto_clasificar, tipos)
-                tipo_corregido = corregir_tipo(tipo, tipos)
-                df_combinado.at[idx, "Tipo"] = tipo_corregido
+                # Candidatos: features publicadas y filas del lote, con la
+                # misma planta (una planta vacía casa con cualquier cosa)
+                candidatos = dedup.filtrar_por_planta(planta, publicados + lote)
+                duplicado, descartados = dedup.detectar_duplicado(nombre_lugar, lat, lon, candidatos)
+
+                # Avisos: casan por nombre pero quedan lejos (sitios distintos)
+                for d in descartados:
+                    print(f"    Aviso dedup: '{nombre_lugar}' casa por nombre con '{d['nombre']}' pero dista {d['distancia_m']:.0f} m: no se fusiona")
+
+                # R3 semántica (con LLM): mismo sitio por planta y coordenadas
+                # pero nombre que no casa por las reglas baratas -> una
+                # llamada corta decide (acotado: solo casos ambiguos)
+                if duplicado is None:
+                    for cand in dedup.candidatos_para_llm(nombre_lugar, planta, lat, lon, candidatos):
+                        if dedup.mismo_lugar_llm(nombre_lugar, cand["nombre"]):
+                            duplicado = cand
+                            print(f"    Dedup semántico: '{nombre_lugar}' es el mismo sitio que '{cand['nombre']}' (LLM)")
+                            break
+
+                if duplicado is not None:
+                    # Copiar el tipo del gemelo; si no tiene tipo conocido,
+                    # se clasifica con LLM como siempre
+                    tipo_gemelo = str(duplicado.get("tipo") or "")
+                    if duplicado.get("idnum"):
+                        # Las features publicadas guardan el tipo CORTO
+                        # ("cafete"); el CSV necesita el largo ("Cafetería...")
+                        tipo_gemelo = dedup.TIPO_LARGO_POR_CORTO.get(tipo_gemelo, "")
+                else:
+                    tipo_gemelo = ""
+
+                if duplicado is not None and tipo_gemelo:
+                    # Marca de duplicado: idnum del gemelo publicado o
+                    # Timestamp del gemelo del lote (el generador resuelve
+                    # ambos formatos y verifica el grupo antes de fusionar)
+                    referencia = duplicado.get("idnum") or duplicado.get("timestamp") or ""
+                    df_combinado.at[idx, "Tipo"] = tipo_gemelo
+                    df_combinado.at[idx, "Duplicado de"] = referencia
+                    print(f"    Duplicado de '{duplicado['nombre']}' ({referencia}): tipo copiado del gemelo, sin llamada LLM")
+                else:
+                    # Combina "Nombre del lugar" y "Descripción" (si existe)
+                    texto_clasificar = row["Nombre del lugar"]
+                    if pd.notna(row.get("Descripción")):
+                        texto_clasificar += f": {row['Descripción']}"
+
+                    # Clasifica el texto
+                    print(f"        Ejecutando LLM para asignar el tipo a la fila {idx}")
+                    tipo = clasificar_tipo(texto_clasificar, tipos)
+                    tipo_corregido = corregir_tipo(tipo, tipos)
+                    df_combinado.at[idx, "Tipo"] = tipo_corregido
+
+                    # Queda como candidata para las siguientes filas del lote
+                    lote.append({
+                        "nombre": nombre_lugar,
+                        "planta": planta,
+                        "lat": lat,
+                        "lon": lon,
+                        "tipo": tipo_corregido,
+                        "timestamp": timestamp,
+                    })
 
     # Guardar el resultado
     df_combinado.to_csv(ruta_nuevo, index=False)
@@ -236,8 +315,3 @@ def procesar_csv(ruta_original, ruta_nuevo):
 
 # %%
 procesar_csv("map_data_form.csv", "map_data.csv")
-
-# %%
-
-
-
