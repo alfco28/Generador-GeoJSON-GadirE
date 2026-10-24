@@ -22,6 +22,7 @@
 
 import json
 import math
+import re
 import unidecode
 import Levenshtein
 
@@ -176,22 +177,25 @@ def distancia_haversine(lat1, lon1, lat2, lon2):
     return 2 * R * math.asin(math.sqrt(h))
 
 # %%
-def _digitos(nombre):
+def _runs_digitos(nombre):
     """
-    Conjunto de dígitos que aparecen en un nombre normalizado: los números de
+    Tupla con las RACHAS de dígitos de un nombre normalizado: los números de
     un nombre son identificadores del lugar (aula FC2, despacho 305...).
+    Como rachas, y no como conjunto suelto de dígitos: "305" y "350" usan los
+    mismos dígitos pero son habitaciones distintas.
 
     Parameters
     ----------
     nombre : str
-        Nombre del lugar.
+        Nombre del lugar (ya normalizado o tal cual).
 
     Returns
     -------
-    set of str
-        Dígitos únicos del nombre.
+    tuple of str
+        Cada racha consecutiva de dígitos, en orden ('Aula FC2' -> ('2',),
+        'Despacho 305' -> ('305',), 'Seminario B-2.03' -> ('2', '03')).
     """
-    return {c for c in normalizar_nombre(nombre) if c.isdigit()}
+    return tuple(re.findall(r"\d+", normalizar_nombre(nombre)))
 
 # %%
 def _casa_por_nombre(nombre_a, nombre_b):
@@ -222,7 +226,10 @@ def _casa_por_nombre(nombre_a, nombre_b):
     # "Aula FC2" y "Aula FC4" miden 8 caracteres (pasaban el filtro de longitud)
     # y casaban por similitud con coordenadas cercanas, fundiéndose. Los dígitos
     # de un nombre son su identificador: con números distintos no hay R2.
-    if _digitos(na) != _digitos(nb):
+    # FIX v15: los números se comparan como RACHAS, no como conjunto de dígitos:
+    # "Seminario B-203" y "Seminario B-230" tienen los mismos dígitos sueltos
+    # pero son seminarios distintos (lo mismo "Despacho 305" y "Despacho 350").
+    if _runs_digitos(na) != _runs_digitos(nb):
         return False, 0.0
     ratio = Levenshtein.ratio(na, nb)
     if ratio >= RATIO_SIMILITUD:
