@@ -399,8 +399,14 @@ def _run_pending(argv, project):
         for posicion, idx in enumerate(pendientes, start=1):
             print(f"{posicion}. Timestamp: {_cell(df, idx, 'Timestamp')!r}   "
                   f"[{posicion}/{len(pendientes)}]")
+            # FIX (post-v16): the form CSV has NO "Campus"/"Edificio" columns
+            # (the generator infers them from the KML at publish time), so
+            # reading them here crashed with a KeyError. Show the location
+            # data the CSV actually holds instead: floor + coordinates.
             print(f"     {_cell(df, idx, 'Nombre del lugar')}  "
-                  f"[{_cell(df, idx, 'Campus')} / {_cell(df, idx, 'Edificio')}]")
+                  f"[{_cell(df, idx, 'Planta')} @ "
+                  f"{_cell(df, idx, 'Coordenadas: latitud')}, "
+                  f"{_cell(df, idx, 'Coordenadas: longitud')}]")
         print('\nTo review one: python3 review.py "<Timestamp>"')
         return 0
 
