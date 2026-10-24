@@ -1,6 +1,6 @@
 # Generador del GeoJSON
 
-Este proyecto tiene por finalidad facilitar el generar desde cero y actualizar el archivo GeoJSON que contiene los datos del mapa usado en el proyecto *GadirE*. Lo forman dos programas de Python —`adecuacion.py` (moderación de los aportes) y `generador_map_data.py` (generación del GeoJSON)— y una herramienta auxiliar, `editor_kml.html`, para crear y editar los polígonos de campus y edificios (ver `kml_editor.md`).
+Este proyecto tiene por finalidad facilitar el generar desde cero y actualizar el archivo GeoJSON que contiene los datos del mapa usado en el proyecto *GadirE*. Lo forman dos programas de Python —`adecuacion.py` (moderación de los aportes) y `generador_map_data.py` (generación del GeoJSON)—, el módulo `dedup.py` (deduplicación con fusión aditiva, compartido por ambos; ver `dedup.md`), el módulo `registro.py` y los scripts de operación (`update.py`, `reset.py`, `calendario.py`, `cron.py`, `estado.py`; ver `ops.md`), y una herramienta auxiliar, el editor de KML de `kml_editor/`, para crear y editar los polígonos de campus y edificios (ver `kml_editor.md`).
 
 ## El flujo de trabajo
 
@@ -22,6 +22,7 @@ Este proyecto tiene por finalidad facilitar el generar desde cero y actualizar e
   - Procesa solo las filas cuyo `Timestamp` no esté ya publicado (incremental, ver abajo) **y** con `Aprobado == "Sí"`.
   - Infiere el campus y el edificio de cada lugar usando los KML.
   - **Excluye los lugares con campus o edificio `None` o `"Desconocido"`**: no generan feature, no consumen número de `idnum` y se reexaminan en cada ejecución.
+  - **Deduplica con fusión aditiva**: un aporte que repita un punto existente NO crea feature ni `idnum` nuevo; su información nueva se AÑADE a la feature existente (ver `dedup.md`).
   - Genera un `idnum` único para cada lugar creado y lo combina con las features ya existentes.
 
 ## Requisitos y dependencias
@@ -50,6 +51,7 @@ Necesario. Es el CSV moderado que produce `adecuacion.py`, con las columnas del 
 - `Revisado`.
 - `Aprobado`.
 - `Tipo`.
+- `Duplicado de` (dedup): el `idnum` del gemelo publicado o el `Timestamp` del gemelo del lote, cuando el aporte repite un punto ya conocido (la escribe sólo `adecuacion.py`, y el generador la verifica contra el grupo antes de fusionar).
 
 De ellas, el generador emplea: `Timestamp` (para el incremental), `Nombre del lugar`, `Descripción`, `Enlace`, `Planta`, `Coordenadas: latitud`, `Coordenadas: longitud`, `Aprobado` y `Tipo`. Si alguna de estas columnas está vacía en un elemento, se establece la cadena vacía como resultado.
 
@@ -57,7 +59,7 @@ Está pensado para que se obtenga a partir de un formulario que rellenen los usu
 
 ### `campus.kml` y `edificios.kml`
 
-Necesarios. Polígonos de los campus y de los edificios, usados para inferir el campus y el edificio de cada lugar a partir de sus coordenadas (`Point.within(polygon)`, interior estricto: un punto justo sobre el borde puede quedar sin asignar). Cada polígono debe llevar una etiqueta `<name>` con el nombre **exacto** del campus o edificio, coincidente con las claves de `campus_codes`/`edificio_codes` (y, para los edificios, con el conjunto de su campus): un acento o un espacio de más deja los lugares sin asignar. Para crearlos o editarlos, empléese `editor_kml.html` (ver `kml_editor.md`); como alternativa, [Google My Maps](https://www.google.com/maps/about/mymaps/) permite dibujarlos y exportarlos como KML.
+Necesarios. Polígonos de los campus y de los edificios, usados para inferir el campus y el edificio de cada lugar a partir de sus coordenadas (`Point.within(polygon)`, interior estricto: un punto justo sobre el borde puede quedar sin asignar). Cada polígono debe llevar una etiqueta `<name>` con el nombre **exacto** del campus o edificio, coincidente con las claves de `campus_codes`/`edificio_codes` (y, para los edificios, con el conjunto de su campus): un acento o un espacio de más deja los lugares sin asignar. Para crearlos o editarlos, empléese el editor de `kml_editor/` (ver `kml_editor.md`); como alternativa, [Google My Maps](https://www.google.com/maps/about/mymaps/) permite dibujarlos y exportarlos como KML.
 
 ### `map_data.geojson`
 
@@ -65,7 +67,7 @@ Opcional. Si es dado, se actualizará añadiendo los puntos nuevos que aparezcan
 
 ### `log.json`
 
-Opcional. No está pensado para ser creado manualmente, sino por este mismo programa. Lleva el registro (`procesados`) de los `Timestamp` ya publicados en el GeoJSON, así como los contadores de IDs (`id_counter`) de cada (campus, edificio, planta, tipo). Si falta o está corrupto, se entiende que también se ha borrado `map_data.geojson` y se regenera de cero; si tiene el **formato antiguo** (sin `procesados`), el programa aborta pidiendo la regeneración, para no duplicar el mapa.
+Opcional. No está pensado para ser creado manualmente, sino por este mismo programa. Lleva el registro (`procesados`) de los `Timestamp` ya publicados en el GeoJSON, así como los contadores de IDs (`id_counter`) de cada (campus, edificio, planta, tipo). Si falta o está corrupto, se entiende que también se ha borrado `map_data.geojson` y se regenera de cero; si tiene el **formato antiguo** (sin `procesados`), el programa aborta pidiendo el reset, para no duplicar el mapa. Desde v14 hay además **guardas de coherencia**: si se ha borrado un archivo de estado sin el otro (log sin geojson → mapa vacío; geojson sin log → duplicados), el programa aborta con un mensaje claro en lugar de corromper el mapa.
 
 ## Salida
 
@@ -75,7 +77,7 @@ Archivo con los datos del mapa, compatible con el sistema de funcionamiento de *
 
 ### `log.json`
 
-Registro de progreso y contadores de IDs. Ejemplo:
+Registro de progreso, contadores de IDs y auditoría completa (deduplicación y ejecuciones). Ejemplo (formato v14):
 
 ```json
 {
@@ -91,9 +93,25 @@ Registro de progreso y contadores de IDs. Ejemplo:
                 }
             }
         }
-    }
+    },
+    "fusiones": [
+        {"timestamp": "...", "idnum": "330100501", "campos_actualizados": ["descrip", "enlace"], "alias": "Punto de carga VE FC"}
+    ],
+    "avisos_duplicados": [
+        {"timestamp": "...", "idnum_existente": "308010401", "distancia_m": 263.1}
+    ],
+    "ejecuciones": [
+        {"fecha": "2026-10-24T14:43:50", "modo": "update", "duracion_s": 3.2,
+         "filas_csv": 14, "no_aprobadas": 1, "ya_publicadas": 10, "publicadas": 1,
+         "fusionadas": 1, "excluidas_sin_ubicacion": 1, "features_finales": 9,
+         "fusiones_esta_ejecucion": ["..."], "avisos_esta_ejecucion": ["..."],
+         "idnums_asignados": {"...": "229010301"},
+         "resumen_adecuacion": {"llm_revision": 2, "llm_clasificacion": 1, "...": "..."}}
+    ]
 }
 ```
+
+Cada ejecución del generador añade su entrada completa a `ejecuciones` (modo `update`/`reset`/`manual`, duración, qué le pasó a cada fila, `idnum` asignados, fusiones y avisos de esa pasada, y el resumen de la moderación si la hubo). El texto completo de cada ejecución, con las respuestas crudas del LLM y las decisiones fila a fila, queda en los logs de `logs/` (ver `ops.md`).
 
 ## Funcionamiento externo
 
@@ -115,24 +133,26 @@ Las filas **no aprobadas no se marcan como procesadas**: se reexaminan en cada e
 
 Las filas cuyo campus o edificio no puedan inferirse de las coordenadas (queden como `None` o `"Desconocido"`) **no generan feature**: se excluyen del GeoJSON y no consumen número de `idnum`, pero se **reexaminan en cada ejecución**, de modo que en cuanto se les pueda asignar campus y edificio (p. ej. tras mejorar los KML) se publican solas.
 
-## Regeneración completa (mantenimiento)
+## Reset (mantenimiento)
 
-Empezar de cero no es una medida de emergencia, sino el mecanismo normal de mantenimiento. Para regenerar, déjense únicamente el programa y `map_data.csv`, y elimínense **juntos** `map_data.geojson` y `log.json`:
+Empezar de cero no es una medida de emergencia, sino el mecanismo normal de mantenimiento. El nombre definitivo de la regeneración completa es **reset**. La vía normal es el script:
 
 ```bash
-rm -f log.json map_data.geojson
+sudo python3 reset.py
 ```
 
-(Si los archivos de estado pertenecen a root, p. ej. porque los crea un cron, empléese `sudo rm -f`: el `rm` interactivo, sin `-f`, pregunta y por defecto NO borra archivos protegidos.)
+Pide confirmación escribiendo exactamente `GadirE`, respalda los dos archivos de estado en `backups/` y los borra **juntos**, y después ejecuta el pipeline completo en modo `reset`. `map_data.csv` no se toca (guarda los veredictos manuales, que la moderación reutiliza).
+
+A mano equivaldría a: dejar únicamente el programa y `map_data.csv`, y eliminar **juntos** `map_data.geojson` y `log.json` con `sudo rm -f` (el `rm` interactivo, sin `-f`, pregunta y por defecto NO borra archivos protegidos) y volver a ejecutar. **Nunca se borra uno sin el otro**: desde v14 el generador lo detecta y aborta, en lugar de publicar un mapa vacío o duplicar todo.
 
 Ejecutado después el programa, el resultado es un GeoJSON **1:1 con las filas `Aprobado == "Sí"` del CSV**, con estas garantías:
 
 - Se **purgan** las features fantasma (puntos duplicados o apilados que no corresponden a ninguna fila actual del CSV).
-- Se **recuperan** las filas aprobadas demasiado tarde (con el incremental por `Timestamp` la siguiente ejecución ya las publica por sí sola; la regeneración es la vía inmediata).
+- Se **recuperan** las filas aprobadas demasiado tarde (con el incremental por `Timestamp` la siguiente ejecución ya las publica por sí sola; el reset es la vía inmediata).
 - Se **reparan** los `log.json` corruptos o editados a mano.
 - Los `idnum` de las filas válidas se **reproducen idénticos** (los identificadores siguen siendo estables).
 
-**Regenerése siempre que:**
+**Hágase reset siempre que:**
 
 - Se aprueben o veten filas a mano en `map_data.csv` (con el incremental por `Timestamp` no es estrictamente necesario, pero garantiza un GeoJSON 1:1 con el CSV).
 - Se sospeche de duplicados o puntos corruptos.
@@ -140,7 +160,7 @@ Ejecutado después el programa, el resultado es un GeoJSON **1:1 con las filas `
 
 ### Ediciones manuales de filas ya procesadas
 
-El incremental es por `Timestamp`, no por posición: una fila antigua aprobada o vetada a mano (p. ej. un `Revisar manualmente` resuelto tiempo después) se publica por sí sola en la siguiente ejecución, porque su `Timestamp` no consta en `procesados`. Regenerar tras editar filas a mano sigue siendo recomendable para obtener un GeoJSON 1:1 con el CSV de una vez.
+El incremental es por `Timestamp`, no por posición: una fila antigua aprobada o vetada a mano (p. ej. un `Revisar manualmente` resuelto tiempo después) se publica por sí sola en la siguiente ejecución, porque su `Timestamp` no consta en `procesados`. Hacer reset tras editar filas a mano sigue siendo recomendable para obtener un GeoJSON 1:1 con el CSV de una vez.
 
 ## Funcionamiento interno
 
@@ -179,7 +199,7 @@ Respecto a `idnum`: sigue la estructura `CEEPPTTII`, donde:
 
 La identificación de cada elemento se lleva a cabo mediante las biyecciones establecidas al principio del programa. Considérense las limitaciones que pueda implicar este sistema de numeración (dos dígitos por campo: a lo sumo 99 edificios, 99 índices por combinación campus-edificio-planta-tipo, etc.).
 
-Este sistema de numeración es el que usa *GadirE* para determinar y distinguir los *features*. Es indispensable que `map_data.geojson` no contenga dos *features* con el mismo `idnum`; este programa cumple con esa condición dentro de sus límites, y la regeneración completa restablece esa garantía partiendo del CSV.
+Este sistema de numeración es el que usa *GadirE* para determinar y distinguir los *features*. Es indispensable que `map_data.geojson` no contenga dos *features* con el mismo `idnum`; este programa cumple con esa condición dentro de sus límites, y el reset restablece esa garantía partiendo del CSV.
 
 ## Configuración y personalización
 
@@ -204,11 +224,11 @@ Este sistema de numeración es el que usa *GadirE* para determinar y distinguir 
 
 ### Actualizar los polígonos de campus/edificios
 
-1. Abrir `editor_kml.html` en el navegador e importar los KML actuales del repositorio (la importación conserva el orden).
+1. Abrir `kml_editor/kml_editor.html` en el navegador e importar los KML actuales del repositorio (la importación conserva el orden).
 2. Editar los polígonos: mover vértices, renombrar, añadir, eliminar, reordenar.
 3. Descargar los dos archivos y sustituir `campus.kml` y `edificios.kml` en la carpeta.
 4. Si se han añadido, eliminado o renombrado edificios o campus, actualizar también `generador_map_data.py` (`edificio_codes`/`campus_codes` y los conjuntos de edificios por campus); el botón *Copy Python codes* del editor genera los diccionarios ya renumerados.
-5. **Regenerar** (borrar `log.json` y `map_data.geojson` **juntos** y ejecutar `generador_map_data.py`): el incremental solo publica filas nuevas, de modo que sin regeneración las features existentes no se reubican con los polígonos nuevos.
+5. **Hacer reset** (borrar `log.json` y `map_data.geojson` **juntos** y ejecutar de nuevo; o directamente `sudo python3 reset.py`): el incremental solo publica filas nuevas, de modo que sin reset las features existentes no se reubican con los polígonos nuevos.
 
 ## Despliegue en el servidor (producción)
 
@@ -251,8 +271,8 @@ Tras cambiar el GeoJSON, recordar el **bump de la caché del service worker** (`
 
 1. **Inferencia geográfica**: la precisión depende de la calidad de los polígonos de los KML; `within` exige el interior estricto, así que un punto justo sobre un borde puede quedar sin asignar. Los lugares fuera de todo polígono se excluyen del GeoJSON y se reexaminan en cada ejecución hasta que se les pueda asignar uno.
 2. **Modelo de lenguaje**: la clasificación y revisión dependen del modelo; puede requerir ajustes en el prompt (los falsos positivos existen: ver la validación manual). Si el modelo devuelve un tipo no predefinido, se corrige automáticamente.
-3. **Validación manual**: revisar siempre los lugares marcados como `Revisar manualmente` en `map_data.csv` y resolverlos (`"Sí"` o `"No"`); el incremental los publicará (o no) en la siguiente ejecución, y la regeneración deja el GeoJSON 1:1 con el CSV.
-4. **IDs únicos**: el sistema garantiza IDs únicos dentro de un mismo (campus, edificio, planta, tipo). No se garantiza unicidad global si se modifican manualmente los archivos de estado; ante la duda, regenerar.
+3. **Validación manual**: revisar siempre los lugares marcados como `Revisar manualmente` en `map_data.csv` y resolverlos (`"Sí"` o `"No"`); el incremental los publicará (o no) en la siguiente ejecución, y el reset deja el GeoJSON 1:1 con el CSV.
+4. **IDs únicos**: el sistema garantiza IDs únicos dentro de un mismo (campus, edificio, planta, tipo). No se garantiza unicidad global si se modifican manualmente los archivos de estado; ante la duda, hacer reset.
 5. **Rendimiento**: procesar muchos lugares puede ser lento por las llamadas al modelo de lenguaje (solo se revisa lo nuevo, así que el coste es incremental).
 
 ## Ejemplo práctico (Universidad de Cádiz)
@@ -292,9 +312,11 @@ Su `idnum` se descompone como `2` (Bahía de Algeciras) + `29` (ETSIA) + `10` (B
 | Ollama no responde | Servicio no iniciado o modelo no descargado. | Ejecutar `ollama serve` y descargar el modelo (`ollama pull mistral:7b`). |
 | `ModuleNotFoundError` | El entorno virtual no está activado. | Activar el venv antes de ejecutar los scripts. |
 | Error: `log.json` con formato antiguo | El log es de la versión posicional (sin `procesados`). | Borrar `log.json` y `map_data.geojson` **juntos** y volver a ejecutar. |
-| IDs duplicados | `log.json` corrupto o editado a mano. | Regenerar: borrar ambos archivos juntos y ejecutar de nuevo. |
+| IDs duplicados | `log.json` corrupto o editado a mano. | Hacer reset: borrar ambos archivos juntos y ejecutar de nuevo. |
 | GeoJSON vacío (0 features) | Se borró `map_data.geojson` pero no `log.json`. | Borrar **ambos** archivos y ejecutar de nuevo. |
-| Features duplicadas o fantasma | Se borró `log.json` pero no el `map_data.geojson` viejo. | Borrar **ambos** y ejecutar de nuevo (la regeneración las purga). |
-| Un lugar aprobado no aparece | El incremental aún no ha vuelto a ejecutarse. | Ejecutar de nuevo (el incremental por `Timestamp` publica solo las filas aprobadas a mano); si persiste, regenerar. |
+| Features duplicadas o fantasma | Se borró `log.json` pero no el `map_data.geojson` viejo. | Borrar **ambos** y ejecutar de nuevo (el reset las purga). Ya no puede volver a pasar: el generador aborta si se borra uno solo. |
+| Un lugar aprobado no aparece | El incremental aún no ha vuelto a ejecutarse. | Ejecutar de nuevo (el incremental por `Timestamp` publica solo las filas aprobadas a mano); si persiste, hacer reset. |
 | Lugares sin campus/edificio en el GeoJSON | Coordenadas fuera de los polígonos. | Revisar los KML o añadir polígonos; el lugar queda excluido y se reexamina en cada ejecución hasta poder asignarse. |
-| `rm` no borra los archivos de estado | Pertenecen a root (p. ej. los crea un cron) y `rm` pregunta. | Usar `sudo rm -f`. |
+| `rm` no borra los archivos de estado | Pertenecen a root (p. ej. los crea un cron) y `rm` pregunta. | Usar `sudo rm -f`, o mejor `sudo python3 reset.py`. |
+| Se borró un archivo de estado sin el otro | Incoherencia log/geojson (mapa vacío o duplicados). | Desde v14 el generador aborta con un mensaje claro; hacer reset (`sudo python3 reset.py`) para reconstruir. |
+| Coordenadas vacías o no numéricas en una fila | El formulario no rellenó el GPS. | No rompe nada (v14): se toman como (0, 0) y la fila queda excluida y reexaminada; quedar registrado en el log. |

@@ -4,6 +4,7 @@ import ollama
 import Levenshtein
 import unidecode
 import string
+import json
 
 import dedup
 
@@ -28,6 +29,12 @@ tipos = {
 modelo = "mistral:7b"
 
 # %%
+# Estadísticas de la ejecución en curso (se reinician en cada procesar_csv):
+# se van acumulando aquí para poder volcarlas al final en la línea
+# RESUMEN_ADECUACION, que el orquestador (update.py/reset.py) guarda en el log
+estadisticas = {}
+
+# %%
 def clasificar_tipo(texto, tipos):
     # Crea un prompt para el modelo
     prompt = f"""
@@ -43,7 +50,12 @@ def clasificar_tipo(texto, tipos):
     """
     # Llama al modelo de Ollama
     response = ollama.generate(model=modelo, prompt=prompt)
-    return response["response"].strip()
+    respuesta = response["response"].strip()
+    # Respuesta cruda al log (imprescindible para depurar al modelo) y
+    # contador de llamadas, para el resumen de la ejecución
+    print(f"    LLM (clasificación) respuesta cruda: {respuesta!r}")
+    estadisticas["llm_clasificacion"] = estadisticas.get("llm_clasificacion", 0) + 1
+    return respuesta
 
 # %%
 def normalizar_texto(texto):
@@ -174,6 +186,10 @@ def revisar_contenido(texto):
     response = ollama.generate(model=modelo, prompt=prompt)
     respuesta = response["response"].strip()
 
+    # Respuesta cruda al log y contador: qué contestó EXACTAMENTE el modelo
+    print(f"    LLM (revisión) respuesta cruda: {respuesta!r}")
+    estadisticas["llm_revision"] = estadisticas.get("llm_revision", 0) + 1
+
     # Validar la respuesta del modelo
     if respuesta not in ["Sí", "No", "Revisar manualmente"]:
         return "Revisar manualmente"
@@ -183,6 +199,18 @@ def revisar_contenido(texto):
 def procesar_csv(ruta_original, ruta_nuevo):
     # Leer el CSV original
     df_original = pd.read_csv(ruta_original)
+
+    # Reinicio de las estadísticas de esta pasada (las de la ejecución entera)
+    estadisticas.update({
+        "filas_formulario": len(df_original),
+        "llm_revision": 0,             # llamadas al modelo para revisar contenido
+        "llm_clasificacion": 0,        # llamadas al modelo para clasificar el tipo
+        "llm_dedup_semantico": 0,      # llamadas al modelo para decidir duplicados
+        "filas_revisadas": 0,          # filas moderadas en esta pasada
+        "veredictos_reutilizados": 0,  # veredictos válidos ya guardados (sin LLM)
+        "duplicados_marcados": 0,      # filas marcadas como "Duplicado de"
+        "avisos_dedup": 0,             # casos que casan por nombre pero están lejos
+    })
 
     # Leer el CSV nuevo si existe, si no crear uno vacío con las columnas necesarias
     try:
@@ -200,8 +228,14 @@ def procesar_csv(ruta_original, ruta_nuevo):
     if "Tipo" not in df_nuevo.columns:
         df_nuevo["Tipo"] = ""
 
-    # Combinar los datos, priorizando el nuevo CSV
-    df_combinado = pd.concat([df_original, df_nuevo]).drop_duplicates(subset=["Timestamp"], keep="last")
+    # Combinar los datos, priorizando el nuevo CSV.
+    # FIX 24-10 (v14): el concat MANTIENE los índices de ambos DataFrames, así
+    # que tras drop_duplicates quedan ETIQUETAS DE ÍNDICE DUPLICADAS (la fila
+    # nueva del formulario y la primera fila del CSV comparten el índice 0).
+    # Escribir con .at[idx, ...] sobre etiquetas repetidas hace abortar a
+    # pandas (InvalidIndexError) en cuanto el formulario trae filas nuevas:
+    # se renumera para que cada fila tenga su etiqueta única.
+    df_combinado = pd.concat([df_original, df_nuevo]).drop_duplicates(subset=["Timestamp"], keep="last").reset_index(drop=True)
 
     # Columna de deduplicación: SOLO se escribe aquí, en map_data.csv (el CSV
     # del formulario NUNCA se edita: la próxima descarga lo pisaría). Guarda a
@@ -222,10 +256,12 @@ def procesar_csv(ruta_original, ruta_nuevo):
     for idx, row in df_combinado.iterrows():
         print(f"\nRevisando fila {idx}")
         if row["Revisado"] != "Sí":
+            estadisticas["filas_revisadas"] += 1
             texto = f"Nombre del lugar: {row['Nombre del lugar']}, Descripción: {row['Descripción']}"
             # Si ya tiene un valor en "Aprobado", úsalo; si no, ejecuta el modelo
             if pd.notna(row.get("Aprobado")) and row["Aprobado"] in ["Sí", "No", "Revisar manualmente"]:
                 aprobado = row["Aprobado"]
+                estadisticas["veredictos_reutilizados"] += 1
                 print(f"    Usando valor existente de 'Aprobado': {aprobado} (fila {idx})")
             else:
                 print(f"    Ejecutando LLM para revisar la fila {idx}")
@@ -256,6 +292,7 @@ def procesar_csv(ruta_original, ruta_nuevo):
 
                 # Avisos: casan por nombre pero quedan lejos (sitios distintos)
                 for d in descartados:
+                    estadisticas["avisos_dedup"] += 1
                     print(f"    Aviso dedup: '{nombre_lugar}' casa por nombre con '{d['nombre']}' pero dista {d['distancia_m']:.0f} m: no se fusiona")
 
                 # R3 semántica (con LLM): mismo sitio por planta y coordenadas
@@ -263,6 +300,7 @@ def procesar_csv(ruta_original, ruta_nuevo):
                 # llamada corta decide (acotado: solo casos ambiguos)
                 if duplicado is None:
                     for cand in dedup.candidatos_para_llm(nombre_lugar, planta, lat, lon, candidatos):
+                        estadisticas["llm_dedup_semantico"] += 1
                         if dedup.mismo_lugar_llm(nombre_lugar, cand["nombre"]):
                             duplicado = cand
                             print(f"    Dedup semántico: '{nombre_lugar}' es el mismo sitio que '{cand['nombre']}' (LLM)")
@@ -286,6 +324,7 @@ def procesar_csv(ruta_original, ruta_nuevo):
                     referencia = duplicado.get("idnum") or duplicado.get("timestamp") or ""
                     df_combinado.at[idx, "Tipo"] = tipo_gemelo
                     df_combinado.at[idx, "Duplicado de"] = referencia
+                    estadisticas["duplicados_marcados"] += 1
                     print(f"    Duplicado de '{duplicado['nombre']}' ({referencia}): tipo copiado del gemelo, sin llamada LLM")
                 else:
                     # Combina "Nombre del lugar" y "Descripción" (si existe)
@@ -312,6 +351,9 @@ def procesar_csv(ruta_original, ruta_nuevo):
     # Guardar el resultado
     df_combinado.to_csv(ruta_nuevo, index=False)
     print(f"Proceso completado. Resultado guardado en {ruta_nuevo}")
+    # Línea de resumen para el log del orquestador (update.py/reset.py):
+    # estadísticas completas de la moderación de esta pasada
+    print("RESUMEN_ADECUACION " + json.dumps(estadisticas, ensure_ascii=False))
 
 # %%
 procesar_csv("map_data_form.csv", "map_data.csv")

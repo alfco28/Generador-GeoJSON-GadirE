@@ -5,6 +5,7 @@ import json
 import os
 from collections import defaultdict
 from datetime import datetime
+import time
 import geopandas as gpd
 from shapely.geometry import Point
 
@@ -179,6 +180,28 @@ def redondear_coordenadas(coord):
         return coord
 
 # %%
+def _a_float(valor):
+    """
+    Convierte un valor del CSV a float devolviendo 0.0 si está vacío o no es
+    numérico (una celda vacía ya no tira abajo todo el pipeline: se toman como
+    coordenadas ausentes, que la dedup trata como (0, 0)).
+
+    Parameters
+    ----------
+    valor : str or float or None
+        Valor de la celda del CSV.
+
+    Returns
+    -------
+    float
+        El número, o 0.0 si no se puede convertir.
+    """
+    try:
+        return float(valor)
+    except (TypeError, ValueError):
+        return 0.0
+
+# %%
 # FIX 24-10: el incremental pasa de posicional ("ultima_fila_procesada") a por
 # Timestamp. El bug: las respuestas nuevas del formulario entran ARRIBA del
 # sheet, así que las filas viejas se desplazan de posición y el índice
@@ -195,7 +218,29 @@ def cargar_log(ruta_log):
         # también se ha borrado map_data.geojson para regenerar de cero
         return {"procesados": [], "id_counter": {}}
 
-def guardar_log(ruta_log, procesados, id_counter, fusiones=None, avisos=None):
+def guardar_log(ruta_log, procesados, id_counter, fusiones=None, avisos=None, ejecucion=None, ejecuciones_previas=None):
+    """
+    Guarda el log.json: procesados, contadores de idnum, auditoría de la
+    deduplicación y el registro completo de ejecuciones.
+
+    Parameters
+    ----------
+    ruta_log : str
+        Ruta del archivo log.json.
+    procesados : set of str
+        Timestamps de los aportes ya publicados (o fusionados).
+    id_counter : defaultdict
+        Contadores de idnum por (campus, edificio, planta, tipo).
+    fusiones : list of dict, optional
+        Auditoría de las fusiones realizadas (histórico completo).
+    avisos : list of dict, optional
+        Auditoría de los avisos de duplicados no fusionados.
+    ejecucion : dict, optional
+        Resumen de ESTA ejecución (modo, duración, contadores, idnum
+        asignados...): se añade al final de "ejecuciones".
+    ejecuciones_previas : list of dict, optional
+        Las ejecuciones anteriores registradas en log.json.
+    """
     # Convertir defaultdict a dict normal para guardar en JSON
     id_counter_dict = {}
     for campus, edificios in id_counter.items():
@@ -215,8 +260,12 @@ def guardar_log(ruta_log, procesados, id_counter, fusiones=None, avisos=None):
             # posibles duplicados NO fusionados (por distancia). Claves nuevas,
             # compatibles hacia atrás (los logs antiguos no las traen)
             "fusiones": fusiones or [],
-            "avisos_duplicados": avisos or []
-        }, f, indent=4)
+            "avisos_duplicados": avisos or [],
+            # Registro completo de ejecuciones (la de ahora al final): modo,
+            # duración, contadores por resultado, idnum asignados y el resumen
+            # de la moderación (lo pasa update.py por variable de entorno)
+            "ejecuciones": list(ejecuciones_previas or []) + ([ejecucion] if ejecucion else [])
+        }, f, indent=4, ensure_ascii=False)
 
 # %%
 def cargar_kml_a_geodataframe(ruta_kml):
@@ -300,6 +349,17 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
     Returns:
         dict: FeatureCollection con los puntos procesados.
     """
+    # Modo de esta ejecución (lo marcan update.py/reset.py con la variable de
+    # entorno GADIRE_MODO; ejecutado a mano queda "manual") y el resumen de la
+    # moderación si la hubo (lo pasa el orquestador por GADIRE_RESUMEN_ADECUACION):
+    # ambos quedan grabados en log.json para poder depurar cualquier ejecución
+    modo = os.environ.get("GADIRE_MODO", "manual")
+    try:
+        resumen_adecuacion = json.loads(os.environ.get("GADIRE_RESUMEN_ADECUACION") or "null")
+    except (ValueError, TypeError):
+        resumen_adecuacion = None
+    inicio = time.time()
+
     # Cargar los KML como GeoDataFrames
     gdf_campus = cargar_kml_a_geodataframe(ruta_kml_campus)
     gdf_edificios = cargar_kml_a_geodataframe(ruta_kml_edificios)
@@ -308,8 +368,8 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
     log = cargar_log(ruta_log)
     # FIX 24-10: si el log tiene el formato antiguo (posicional) no hay forma
     # de saber qué filas ya están publicadas; seguir aquí duplicaría todo el
-    # mapa. Se aborta pidiendo la regeneración (borrar log.json y
-    # map_data.geojson JUNTOS, como siempre) en lugar de corromper el mapa.
+    # mapa. Se aborta pidiendo el reset (borrar log.json y map_data.geojson
+    # JUNTOS, como siempre) en lugar de corromper el mapa.
     if "procesados" not in log:
         raise SystemExit("log.json con formato antiguo: borra log.json y map_data.geojson (juntos) y vuelve a ejecutar.")
     # Timestamps de los aportes que ya tienen su feature publicado
@@ -317,6 +377,8 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
     # Auditoría de la deduplicación (claves nuevas: los logs sin ellas dan [])
     fusiones = list(log.get("fusiones", []))
     avisos_duplicados = list(log.get("avisos_duplicados", []))
+    # Historial de ejecuciones registrado en log.json (se extiende con esta)
+    ejecuciones_previas = list(log.get("ejecuciones", []))
     id_counter = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))
 
     # Cargar el contador de IDs desde el log
@@ -329,9 +391,26 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
     # Cargar el GeoJSON existente (si existe)
     features_antiguos = []
     if os.path.exists(ruta_geojson):
-        with open(ruta_geojson, 'r', encoding='utf-8') as f:
-            geojson_existente = json.load(f)
+        # Un GeoJSON corrupto NO se puede mezclar con features nuevas sin más
+        # (features fantasma, duplicados): se aborta pidiendo el reset, igual
+        # que hace la guardia del formato antiguo de log.json
+        try:
+            with open(ruta_geojson, 'r', encoding='utf-8') as f:
+                geojson_existente = json.load(f)
+        except json.JSONDecodeError:
+            raise SystemExit(f"map_data.geojson corrupto: respáldalo y bórralo junto a log.json (reset) y vuelve a ejecutar.")
+        if isinstance(geojson_existente, dict):
             features_antiguos = geojson_existente.get("features", [])
+
+    # Guardas de coherencia del estado (v14): borrar UNO solo de los dos
+    # archivos de estado produce silenciosamente un mapa VACÍO (log sin
+    # geojson: todo consta como ya publicado) o DUPLICADOS (geojson sin log:
+    # todo se re-publica). Antes estos casos pasaban sin avisar; ahora se
+    # aborta pidiendo borrarlos JUNTOS (o usar reset.py, que lo hace bien).
+    if procesados and not features_antiguos:
+        raise SystemExit(f"log.json registra {len(procesados)} aportes pero map_data.geojson no existe o está vacío: bórralos JUNTOS (o usa reset.py) y vuelve a ejecutar.")
+    if features_antiguos and not procesados:
+        raise SystemExit(f"map_data.geojson tiene {len(features_antiguos)} features pero log.json no existe o está vacío: bórralos JUNTOS (o usa reset.py) y vuelve a ejecutar.")
 
     # Índices para la deduplicación: por grupo (campus, edificio, planta), por
     # idnum (marcas "Duplicado de" de features publicadas) y por Timestamp (marcas
@@ -357,6 +436,20 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
         lector_csv = csv.DictReader(archivo_csv)
         filas = list(lector_csv)
 
+    # Contadores de esta ejecución (para la consola y el registro en log.json):
+    # qué le pasó a CADA fila del CSV, nada queda sin contar ni sin explicar
+    estadisticas = {
+        "filas_csv": len(filas),
+        "ya_publicadas": 0,        # ya con su feature publicado: se saltan
+        "no_aprobadas": 0,         # pendientes de veredicto: se reexaminan
+        "publicadas": 0,           # feature nuevo creado en esta ejecución
+        "fusionadas": 0,           # fusionadas en un gemelo (sin feature nuevo)
+        "excluidas_sin_ubicacion": 0,  # sin campus/edificio: se reexaminan
+    }
+    fusiones_esta_ejecucion = []   # timestamps fusionados ahora (para log.json)
+    avisos_esta_ejecucion = []     # avisos emitidos ahora (para log.json)
+    idnums_asignados = {}          # timestamp -> idnum asignado ahora
+
     # Orden cronológico por Timestamp (dd/mm/aaaa hh:mm:ss): la feature "base"
     # de cada lugar es su primer reporte y las duplicadas se fusionan sobre
     # ella en orden natural. También hace que la regeneración completa
@@ -374,12 +467,26 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
         # Clave única del aporte: el Timestamp del formulario
         timestamp = fila.get("Timestamp", "").strip()
 
+        # Sin Timestamp no hay incremental posible: la fila se re-publicaría
+        # como nueva en cada ejecución (duplicado seguro). El formulario
+        # siempre lo rellena; esto es una guardia y queda registrado.
+        if not timestamp:
+            print(f"    AVISO: fila sin Timestamp, ignorada: {fila.get('Nombre del lugar', '')!r}")
+            continue
+
         # Saltar los aportes que ya tienen su feature publicado
         if timestamp in procesados:
+            estadisticas["ya_publicadas"] += 1
             continue
 
         # Añadir esta línea para filtrar por "Aprobado" == "Sí"
         if fila.get("Aprobado", "").strip().lower() != "sí":
+            # No aprobada: se reexamina en cada ejecución (barato, sin LLM)
+            # hasta que se apruebe o vete a mano; queda registrado por qué
+            # no está en el mapa
+            estadisticas["no_aprobadas"] += 1
+            print(f"    No aprobada (se reexamina en cada ejecución): {timestamp} "
+                  f"'{fila.get('Nombre del lugar', '')}' -> {fila.get('Aprobado', '')}")
             continue
 
         # Obtener los valores del CSV
@@ -388,8 +495,12 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
         enlace = fila.get("Enlace", "")
         planta = fila.get("Planta", "")
         tipo = fila.get("Tipo", "").strip().strip('"').strip("'")
-        latitud = float(fila.get("Coordenadas: latitud", 0))
-        longitud = float(fila.get("Coordenadas: longitud", 0))
+        latitud = _a_float(fila.get("Coordenadas: latitud"))
+        longitud = _a_float(fila.get("Coordenadas: longitud"))
+        # Coordenadas ausentes o no numéricas: (0, 0). La dedup las trata
+        # como "compatibles con todo" y nunca miden distancia; queda registrado
+        if latitud == 0 and longitud == 0:
+            print(f"    AVISO: coordenadas vacías o no numéricas en {timestamp} '{nombre_lugar}': se toman como (0, 0)")
 
         # Redondear las coordenadas
         latitud_redondeada = redondear_coordenadas(latitud)
@@ -476,11 +587,17 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
                 # Casan por nombre pero quedan lejos: sitios distintos -> aviso
                 for d in descartados_grupo:
                     idnum_d = d["feature"]["properties"].get("idnum")
+                    # La misma fila se reexamina en cada ejecución: el mismo
+                    # aviso (mismo timestamp e idnum) no se registra dos veces
+                    if any(a.get("timestamp") == timestamp and a.get("idnum_existente") == idnum_d
+                           for a in avisos_duplicados):
+                        continue
                     avisos_duplicados.append({
                         "timestamp": timestamp,
                         "idnum_existente": idnum_d,
                         "distancia_m": round(d["distancia_m"], 1)
                     })
+                    avisos_esta_ejecucion.append(timestamp)
                     print(f"    Aviso dedup: '{nombre_lugar}' casa por nombre con '{d['nombre']}' ({idnum_d}) pero dista {d['distancia_m']:.0f} m: no se fusiona")
 
             if objetivo is not None:
@@ -537,11 +654,13 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
                 if conflictos:
                     fusion["conflictos"] = conflictos
                 fusiones.append(fusion)
+                fusiones_esta_ejecucion.append(timestamp)
                 print(f"    Fusión aditiva: '{nombre_lugar}' se incorpora a '{props.get('nombre')}' ({props.get('idnum')}); campos: {campos_actualizados or 'sin cambios'}")
 
                 # El aporte queda procesado: fusionado en el gemelo, no
                 # genera feature ni consume número de idnum
                 procesados.add(timestamp)
+                estadisticas["fusionadas"] += 1
                 continue
 
             # ---------------- Creación del feature (no es duplicado) ----------------
@@ -556,8 +675,12 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
             planta_value = planta
             if planta in ["Baja", "Sótano"]:
                 planta_value = planta.lower()
-            else:
+            elif planta.split():
                 planta_value = planta.split()[-1]
+            else:
+                # Planta vacía: split() daría lista vacía y [-1] reventaría;
+                # la feature se publica sin planta (el idnum lleva código "00")
+                planta_value = ""
 
             feature = {
                 "type": "Feature",
@@ -579,6 +702,10 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
             }
 
             features_nuevos.append(feature)
+            estadisticas["publicadas"] += 1
+            idnums_asignados[timestamp] = id_formateado
+            print(f"    Feature creado: {id_formateado} '{nombre_lugar}' "
+                  f"({campus}, {edificio}, planta '{planta}', tipo '{tipo}')")
 
             # Registrar el feature en los índices de deduplicación (para las
             # filas duplicadas que vengan después en este mismo lote)
@@ -590,6 +717,13 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
             # ha creado (está publicado). Todo lo demás se reexamina en cada
             # ejecución sin coste (sin LLM) hasta que le toque publicarse.
             procesados.add(timestamp)
+        else:
+            # Sin campus o edificio conocidos: no genera feature ni consume
+            # idnum, pero queda registrado y se reexamina en cada ejecución
+            # hasta que los KML puedan ubicarla
+            estadisticas["excluidas_sin_ubicacion"] += 1
+            print(f"    Excluida sin campus/edificio (se reexamina en cada ejecución): "
+                  f"{timestamp} '{nombre_lugar}' (campus: {campus}, edificio: {edificio})")
 
     # Combinar features antiguos y nuevos
     features_combinados = features_antiguos + features_nuevos
@@ -617,27 +751,44 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
         )
     )
 
-    # Guardar el GeoJSON completo
+    # Guardar el GeoJSON completo (UNA sola escritura, con el mismo formato
+    # de siempre: indent=2 y sin escapar caracteres no ASCII)
     feature_collection = {
         "type": "FeatureCollection",
         "features": features_ordenados
     }
     with open(ruta_geojson, 'w', encoding='utf-8') as f:
-        json.dump(feature_collection, f, indent=4, ensure_ascii=False)
+        json.dump(feature_collection, f, ensure_ascii=False, indent=2)
 
-    # Guardar el log actualizado (procesados + contadores + auditoría dedup)
-    guardar_log(ruta_log, procesados, id_counter, fusiones, avisos_duplicados)
+    # Resumen de ESTA ejecución: queda grabado en log.json ("ejecuciones"):
+    # modo, duración, qué le pasó a cada fila, idnum asignados, fusiones y
+    # avisos de ahora, features finales y el resumen de la moderación
+    ejecucion = {
+        "fecha": datetime.now().isoformat(timespec="seconds"),
+        "modo": modo,
+        "duracion_s": round(time.time() - inicio, 1),
+        **estadisticas,
+        "features_finales": len(features_ordenados),
+        "fusiones_esta_ejecucion": fusiones_esta_ejecucion,
+        "avisos_esta_ejecucion": avisos_esta_ejecucion,
+        "idnums_asignados": idnums_asignados,
+        "resumen_adecuacion": resumen_adecuacion,
+    }
+
+    # Guardar el log actualizado (procesados + contadores + auditoría dedup +
+    # registro completo de ejecuciones)
+    guardar_log(ruta_log, procesados, id_counter, fusiones, avisos_duplicados,
+                ejecucion=ejecucion, ejecuciones_previas=ejecuciones_previas)
+
+    # Línea de resumen para el orquestador (update.py/reset.py la reenvían al
+    # log y a la consola; lleva todo lo que le pasó al CSV en esta ejecución)
+    print("RESUMEN_GENERADOR " + json.dumps(
+        {k: v for k, v in ejecucion.items() if k != "resumen_adecuacion"},
+        ensure_ascii=False))
 
     return feature_collection
 
 # %%
-# Rutas del CSV
-ruta_csv = 'map_data.csv'
-
-# Generar el JSON
-feature_collection = leer_csv_y_generar_json(ruta_csv)
-
-# Guardar el JSON en un archivo
-ruta_json = 'map_data.geojson'
-with open(ruta_json, 'w', encoding='utf-8') as archivo_json:
-    json.dump(feature_collection, archivo_json, ensure_ascii=False, indent=2)
+# Generar el GeoJSON y guardarlo (leer_csv_y_generar_json escribe el archivo:
+# una sola escritura, con el registro completo de la ejecución en log.json)
+leer_csv_y_generar_json('map_data.csv')

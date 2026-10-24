@@ -176,6 +176,24 @@ def distancia_haversine(lat1, lon1, lat2, lon2):
     return 2 * R * math.asin(math.sqrt(h))
 
 # %%
+def _digitos(nombre):
+    """
+    Conjunto de dígitos que aparecen en un nombre normalizado: los números de
+    un nombre son identificadores del lugar (aula FC2, despacho 305...).
+
+    Parameters
+    ----------
+    nombre : str
+        Nombre del lugar.
+
+    Returns
+    -------
+    set of str
+        Dígitos únicos del nombre.
+    """
+    return {c for c in normalizar_nombre(nombre) if c.isdigit()}
+
+# %%
 def _casa_por_nombre(nombre_a, nombre_b):
     """
     Compara dos nombres con las reglas R1 (exacto normalizado) y R2
@@ -199,6 +217,12 @@ def _casa_por_nombre(nombre_a, nombre_b):
         return True, 1.0
     # R2: solo nombres largos (FC2/FC4 y similares jamás casan por parecido)
     if len(na) < LONG_MINIMA_FUZZY or len(nb) < LONG_MINIMA_FUZZY:
+        return False, 0.0
+    # FIX v14: si los NÚMEROS de los nombres difieren, son lugares distintos:
+    # "Aula FC2" y "Aula FC4" miden 8 caracteres (pasaban el filtro de longitud)
+    # y casaban por similitud con coordenadas cercanas, fundiéndose. Los dígitos
+    # de un nombre son su identificador: con números distintos no hay R2.
+    if _digitos(na) != _digitos(nb):
         return False, 0.0
     ratio = Levenshtein.ratio(na, nb)
     if ratio >= RATIO_SIMILITUD:

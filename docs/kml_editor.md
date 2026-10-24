@@ -1,6 +1,6 @@
 # Editor de KML (campus y edificios)
 
-Este documento describe `editor_kml.html`, el editor visual de los dos archivos KML que alimentan al generador (`generador_map_data.py`): `campus.kml` y `edificios.kml`.
+Este documento describe `kml_editor/kml_editor.html`, el editor visual de los dos archivos KML que alimentan al generador (`generador_map_data.py`): `campus.kml` y `edificios.kml`.
 
 ## Qué es
 
@@ -56,7 +56,7 @@ Dos consecuencias prácticas de esa lectura:
 
 ## Flujo de trabajo recomendado (actualizar los polígonos)
 
-1. Ábrase `editor_kml.html` y **Import** los KML actuales (la importación conserva el orden del archivo).
+1. Ábrase `kml_editor/kml_editor.html` y **Import** los KML actuales (la importación conserva el orden del archivo).
 2. Edítense los polígonos: mover vértices, renombrar, añadir, eliminar, reordenar.
 3. **Download** los dos archivos y sustitúyanse en la carpeta del repositorio.
 4. Si se han añadido edificios o campus nuevos, actualícense también `generador_map_data.py`:
@@ -64,12 +64,12 @@ Dos consecuencias prácticas de esa lectura:
    - Cada **campus nuevo** necesita entrada en `campus_codes` (y su conjunto de edificios).
    - Si se ha **renombrado** algo, actualícense igualmente las claves de `edificio_codes`/`campus_codes` y los conjuntos.
    - El botón **Copy Python codes** del editor genera los diccionarios ya renumerados según el orden actual de las listas, listos para pegar.
-5. **Regenerar**: el incremental solo publica las filas nuevas; para que TODAS las features se reubiquen con los polígonos nuevos, bórranse juntos `log.json` y `map_data.geojson` y ejecútese de nuevo (ver la sección de regeneración de `docs/gen_GeoJSON.md`).
-6. Si se ha **eliminado** un edificio, téngase en cuenta que sus lugares dejarán de inferirse: la regeneración los retirará del mapa (quedan como filas excluidas del CSV, no se pierden).
+5. **Reset**: el incremental solo publica las filas nuevas; para que TODAS las features se reubiquen con los polígonos nuevos, ejecútese `reset.py` (borra con respaldo `log.json` y `map_data.geojson` y reconstruye; ver la sección de reset de `docs/gen_GeoJSON.md`).
+6. Si se ha **eliminado** un edificio, téngase en cuenta que sus lugares dejarán de inferirse: el reset los retirará del mapa (quedan como filas excluidas del CSV, no se pierden).
 
 ## Limitaciones
 
 - Requiere conexión a internet (bibliotecas por CDN y teselas del mapa).
 - El autoguardado es local al navegador; los KML del repositorio son la fuente de verdad.
 - El editor trabaja con polígonos simples (un anillo exterior por Placemark); no soporta agujeros (`innerBoundaryIs`) ni importa GeoJSON (pendiente).
-- Los códigos se derivan del orden de la lista: si se reordena y se copian los diccionarios generados, cambian los códigos `EE` de los `idnum` existentes. Es inocuo si después se regenera el GeoJSON completo, pero conviene importar los KML en su orden original para no renumerar por accidente.
+- Los códigos se derivan del orden de la lista: si se reordena y se copian los diccionarios generados, cambian los códigos `EE` de los `idnum` existentes. Es inocuo si después se hace un reset del GeoJSON completo, pero conviene importar los KML en su orden original para no renumerar por accidente.
