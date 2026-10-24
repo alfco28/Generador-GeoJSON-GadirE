@@ -1,0 +1,100 @@
+    /* ==== application styles ==== */
+    * { box-sizing: border-box; }
+    :root { font-family: system-ui, sans-serif; color: #1f2937; background: #f1f5f9; }
+    body { margin: 0; display: flex; flex-direction: column; height: 100vh; }
+    header {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      padding: 10px 16px; background: #0f172a; color: white;
+    }
+    header h1 { font-size: 15px; margin: 0; font-weight: 600; }
+    .draw-to {
+      display: flex; align-items: center; gap: 8px; font-size: 13px;
+      margin-left: auto; /* the selector sits at the right end of the header */
+    }
+    .draw-to .seg { display: flex; border: 1px solid #475569; border-radius: 6px; overflow: hidden; }
+    .draw-to button {
+      border: 0; padding: 6px 12px; font-size: 13px; cursor: pointer;
+      background: #1e293b; color: #e2e8f0;
+    }
+    .draw-to button.active { background: #2563eb; color: white; font-weight: 600; }
+    main { flex: 1; display: flex; min-height: 0; }
+    #map { flex: 1; }
+    aside {
+      width: 360px; background: white; border-left: 1px solid #e2e8f0;
+      display: flex; flex-direction: column; min-height: 0;
+    }
+    .panels { flex: 1; overflow: auto; padding: 8px 10px; }
+    .block { margin-bottom: 14px; }
+    .block > h2 {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+      color: #475569; margin: 0 0 8px;
+    }
+    .block > h2 .count { color: #94a3b8; font-weight: 400; text-transform: none; }
+    .block > h2 .actions { margin-left: auto; display: flex; gap: 4px; flex-wrap: wrap; }
+    .block > h2 .actions button {
+      border: 1px solid #e2e8f0; background: white; border-radius: 5px;
+      font-size: 11px; padding: 3px 7px; cursor: pointer; color: #334155;
+    }
+    .block > h2 .actions button:hover { background: #f1f5f9; }
+    .item {
+      border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px;
+      margin-bottom: 7px; display: flex; flex-direction: column; gap: 5px;
+      background: white;
+      transition: border-color .25s, background .25s, box-shadow .25s;
+    }
+    .item.flash { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 2px rgba(37, 99, 235, .2); }
+    .item.dragging { opacity: .45; }
+    .item.drop-above { box-shadow: 0 -3px 0 0 #2563eb; }
+    .item.drop-below { box-shadow: 0 3px 0 0 #2563eb; }
+    .item .row { display: flex; align-items: center; gap: 6px; }
+    .item .grip {
+      flex: none; cursor: grab; color: #94a3b8; font-size: 14px;
+      user-select: none; padding: 0 2px; line-height: 1;
+      touch-action: none; /* the grip drag owns touch gestures */
+    }
+    .item .code {
+      flex: none; font-size: 11px; font-weight: 700; color: #475569;
+      background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px 5px;
+    }
+    .item .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+    .item input {
+      flex: 1; min-width: 0; border: 1px solid #e2e8f0; border-radius: 6px;
+      padding: 5px 7px; font-size: 12.5px;
+    }
+    .item input.invalid { border-color: #ef4444; background: #fef2f2; }
+    .item .meta { font-size: 11px; color: #94a3b8; flex: none; }
+    .item button.mini {
+      flex: none; border: 0; background: none; cursor: pointer;
+      font-size: 13px; padding: 1px 3px; color: #475569; line-height: 1;
+    }
+    .item button.mini.del { color: #ef4444; }
+    .badge {
+      font-size: 11px; border-radius: 5px; padding: 2px 7px;
+      display: inline-block; margin-right: 4px;
+    }
+    .badge.red { background: #fee2e2; color: #b91c1c; }
+    .empty { color: #94a3b8; font-size: 12.5px; padding: 2px 4px; }
+    .hints {
+      font-size: 11px; color: #64748b; line-height: 1.5;
+      border-top: 1px solid #e2e8f0; padding: 8px 4px 2px;
+    }
+    pre#preview {
+      margin: 0; padding: 12px; background: #0f172a; color: #a5f3fc;
+      font-size: 11px; overflow: auto; max-height: 220px; display: none;
+      border-top: 1px solid #e2e8f0; white-space: pre-wrap; cursor: pointer;
+    }
+    .side-footer {
+      font-size: 11px; color: #94a3b8; padding: 7px 12px; flex: none;
+      border-top: 1px solid #e2e8f0; background: white;
+    }
+    /* Heading added to the Leaflet layer control so its checkboxes are
+       self-explanatory (injected by the app script). */
+    .leaflet-control-layers .layers-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; color: #475569; padding: 6px 10px 2px;
+    }
+    @media (max-width: 700px) {
+      main { flex-direction: column; }
+      aside { width: auto; border-left: 0; border-top: 1px solid #e2e8f0; max-height: 45%; }
+    }
