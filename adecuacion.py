@@ -243,6 +243,13 @@ def procesar_csv(ruta_original, ruta_nuevo):
     # Timestamp de otra fila del mismo lote.
     if "Duplicado de" not in df_combinado.columns:
         df_combinado["Duplicado de"] = ""
+    # FIX 24-10 (v16): si la columna existe pero está VACÍA en todas las
+    # filas, pandas la lee del CSV como float64 (todo NaN) y el .at de
+    # abajo aborta con "Invalid value ... for dtype 'float64'" en cuanto
+    # se marca el primer duplicado (pandas ya no convierte el dtype en
+    # silencio). Se fuerza a object antes de escribir.
+    elif df_combinado["Duplicado de"].dtype != object:
+        df_combinado["Duplicado de"] = df_combinado["Duplicado de"].astype(object)
 
     # Features ya publicadas (map_data.geojson), candidatas a duplicado. En
     # regeneración completa el archivo no existe y devuelve []: las fusiones
