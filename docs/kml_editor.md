@@ -1,6 +1,6 @@
 # Editor de KML (campus y edificios)
 
-Este documento describe `editor_kml.html`, el editor visual de los dos archivos KML que alimentan al generador (`generador_map_data.py`): `campus.kml` y `edificios.kml`. Está pensado para copiarse al repositorio como `docs_editor_kml.md`, junto al propio `editor_kml.html`.
+Este documento describe `editor_kml.html`, el editor visual de los dos archivos KML que alimentan al generador (`generador_map_data.py`): `campus.kml` y `edificios.kml`.
 
 ## Qué es
 
@@ -64,7 +64,7 @@ Dos consecuencias prácticas de esa lectura:
    - Cada **campus nuevo** necesita entrada en `campus_codes` (y su conjunto de edificios).
    - Si se ha **renombrado** algo, actualícense igualmente las claves de `edificio_codes`/`campus_codes` y los conjuntos.
    - El botón **Copy Python codes** del editor genera los diccionarios ya renumerados según el orden actual de las listas, listos para pegar.
-5. **Regenerar**: el incremental del generador solo re-infiere las filas nuevas; para que TODAS las features se reubiquen con los polígonos nuevos, bórranse juntos `log.json` y `map_data.geojson` y ejecútese de nuevo (ver la sección de regeneración del README).
+5. **Regenerar**: el incremental solo publica las filas nuevas; para que TODAS las features se reubiquen con los polígonos nuevos, bórranse juntos `log.json` y `map_data.geojson` y ejecútese de nuevo (ver la sección de regeneración de `docs/gen_GeoJSON.md`).
 6. Si se ha **eliminado** un edificio, téngase en cuenta que sus lugares dejarán de inferirse: la regeneración los retirará del mapa (quedan como filas excluidas del CSV, no se pierden).
 
 ## Limitaciones

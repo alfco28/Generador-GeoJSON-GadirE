@@ -375,7 +375,11 @@
     }
 
     function deletePolygon(type, i) {
-      map.removeLayer(polygons[type][i].layer);
+      // Remove from the layer GROUP, not just the map: map.removeLayer does
+      // nothing when the group is hidden (the polygon is not on the map), and
+      // even with the group visible it leaves the layer inside the group —
+      // re-ticking "View" would then resurrect deleted polygons as ghosts.
+      layerGroups[type].removeLayer(polygons[type][i].layer);
       polygons[type].splice(i, 1);
       renderAll();
       commitHistory();
@@ -844,7 +848,9 @@ ${polygons[type].map(placemarkKml).join('\n')}
 
     function clearAll() {
       LAYERTYPES.forEach(type => {
-        polygons[type].forEach(p => map.removeLayer(p.layer));
+        // Group-level removal too: otherwise undo/redo would resurrect the
+        // polygons of a hidden layer when "View" ticks it back on (ghosts).
+        polygons[type].forEach(p => layerGroups[type].removeLayer(p.layer));
         polygons[type] = [];
         overlapIdx[type] = new Set();
       });
@@ -987,6 +993,9 @@ ${polygons[type].map(placemarkKml).join('\n')}
     map.on('pm:remove', (e) => {
       LAYERTYPES.forEach(type => {
         polygons[type] = polygons[type].filter(p => p.layer !== e.layer);
+        // Geoman only detaches the layer from the map; drop it from the
+        // group as well, or it comes back when "View" re-adds the group.
+        layerGroups[type].removeLayer(e.layer);
       });
       renderAll();
       commitHistory();
