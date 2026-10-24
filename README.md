@@ -9,17 +9,16 @@ Este proyecto permite **generar y actualizar** un archivo **GeoJSON** con datos 
 1. **`adecuacion.py`**: Procesa un CSV de entrada, revisa y clasifica los lugares usando un modelo de lenguaje local (Ollama), y genera un CSV intermedio con los datos validados y clasificados.
 2. **`generador_map_data.py`**: Toma el CSV procesado, infiere campus y edificios a partir de coordenadas, y genera el GeoJSON final con identificadores únicos, **excluyendo lugares con campus o edificio sin asignar (`None`) o `"Desconocido"`**.
 
-> **Nota sobre los notebooks**: los dos programas existen como cuadernos Jupyter (`.ipynb`) y como exportes a Python (`.py`). En el servidor de producción se ejecutan los `.py`. **Cualquier cambio debe aplicarse a ambas versiones** (`.ipynb` y `.py`) para que no se desincronicen.
+> **Nota sobre los cuadernos**: los programas existían como cuadernos Jupyter (`.ipynb`) y como exportes a Python (`.py`); los cuadernos fueron eliminados del repositorio, de modo que **los `.py` son la única versión** del código. En el servidor de producción se ejecutan los `.py`.
 
 ---
 
 ## 📂 Estructura del Proyecto
 
 ```
-├── adecuacion.ipynb         # Cuaderno: preprocesamiento y clasificación
-├── adecuacion.py            # Exporte del cuaderno anterior
-├── generador_map_data.ipynb # Cuaderno: generación del GeoJSON
-├── generador_map_data.py    # Exporte del cuaderno anterior
+├── adecuacion.py            # Preprocesamiento y clasificación (moderación con Ollama)
+├── generador_map_data.py    # Generación del GeoJSON
+├── editor_kml.html          # Editor visual de campus.kml y edificios.kml (navegador)
 ├── campus.kml                # Polígonos de los campus (inferencia geográfica)
 ├── edificios.kml             # Polígonos de los edificios (inferencia geográfica)
 ├── map_data_form.csv         # CSV de entrada (aportes del formulario de usuarios)
@@ -27,6 +26,7 @@ Este proyecto permite **generar y actualizar** un archivo **GeoJSON** con datos 
 ├── map_data.geojson          # GeoJSON final (generado por generador_map_data.py)
 ├── log.json                  # Estado incremental del generador
 ├── docs_gen_GeoJSON.md       # Documentación interna del generador
+├── docs_editor_kml.md        # Documentación del editor de KML
 └── LICENSE
 ```
 
@@ -46,7 +46,9 @@ Este proyecto permite **generar y actualizar** un archivo **GeoJSON** con datos 
 ### 2. Generación del GeoJSON (`generador_map_data.py`)
 - **Entrada**:
   - `map_data.csv` (lugares validados).
-  - `campus.kml` y `edificios.kml` (para inferir campus/edificio a partir de coordenadas).
+  - Archivos KML con polígonos que definen los límites de **campus** y **edificios**.
+    - Cada polígono debe tener un `<name>` con el nombre del campus/edificio (ej: "Facultad de Ciencias"), **coincidente de forma exacta** con las claves de `campus_codes`/`edificio_codes` en `generador_map_data.py`: la inferencia empareja por nombre exacto, así que un acento o un espacio de más deja los lugares sin asignar.
+    - **Cómo generarlos y editarlos**: usar `editor_kml.html` (ver `docs_editor_kml.md`), el editor visual incluido en este repositorio. Como alternativa, [Google My Maps](https://www.google.com/maps/about/mymaps/) permite dibujar los polígonos y exportarlos como KML.
   - `log.json` (opcional, para continuar desde la última ejecución).
 - **Salida**:
   - `map_data.geojson` (GeoJSON con todos los lugares **excluyendo aquellos con campus o edificio `None` o `"Desconocido"`**).
@@ -76,7 +78,7 @@ Columnas (en este orden): `Timestamp`, `Nombre del lugar`, `Descripción`, `Enla
 
 #### `campus.kml` y `edificios.kml`
 - Archivos KML con polígonos que definen los límites de **campus** y **edificios**.
-- Cada polígono debe tener un atributo `Name` con el nombre del campus/edificio (ej: "Facultad de Ciencias").
+- Cada polígono debe tener una etiqueta `<name>` con el nombre del campus/edificio (ej: "Facultad de Ciencias").
 - **Cómo generarlos**: Usar [Google My Maps](https://www.google.com/maps/about/mymaps/) para dibujar los polígonos y exportarlos como KML.
 
 #### `log.json` (opcional)
@@ -166,7 +168,7 @@ Definidos en `generador_map_data.py`:
 - El `idnum` se genera como `CEEPPTTII` (Campus + Edificio + Planta + Tipo + Índice).
 
 ### Inferencia Geográfica
-- Los KML (`campus.kml`, `edificios.kml`) deben tener polígonos con el atributo `Name` coincidente con los nombres en los códigos.
+- Los KML (`campus.kml`, `edificios.kml`) deben tener polígonos con la etiqueta `<name>` coincidente con los nombres en los códigos.
 - Si un lugar no está dentro de ningún polígono, se excluye del GeoJSON (pero se marca como procesado).
 
 ---
@@ -194,9 +196,9 @@ pip install pandas ollama python-Levenshtein unidecode geopandas shapely
   - [Ollama GitHub](https://github.com/jmorganca/ollama)
   - [Documentación de Ollama](https://github.com/jmorganca/ollama#readme)
 
-### Google My Maps (para generar KML)
-- [Google My Maps](https://www.google.com/maps/about/mymaps/)
-- **Guía rápida**:
+### Generación de KML
+- **`editor_kml.html`** (recomendado): página HTML única que se abre en cualquier navegador moderno, sin instalación ni servidor. Permite dibujar, editar, renombrar, reordenar, importar y exportar los polígonos de `campus.kml` y `edificios.kml` directamente en el formato exacto que lee `generador_map_data.py` (nombres de archivo, `<name>` de cada polígono y estructura de Placemark idénticos). El uso completo está documentado en `docs_editor_kml.md`.
+- Alternativa: [Google My Maps](https://www.google.com/maps/about/mymaps/). Guía rápida:
   1. Crear un nuevo mapa.
   2. Dibujar polígonos para cada campus/edificio.
   3. Asignar un nombre a cada polígono (ej: "Facultad de Ciencias").
@@ -273,7 +275,7 @@ El backend de producción es un **clon de este repositorio** con su propio venv 
 0 4 * * 1-5     actualizar_mapa.sh                   # mapa, de lunes a viernes
 30 4 * * *      actualiza_calendario_pre_ceuca.sh    # calendario, a diario
 ```
-Comprobar la zona horaria del servidor antes de fiarse de las horas: los cron usan la hora local del servidor, y en la instalación actual parece ir en UTC (la actualización del mapa dispara a las 6:00 hora española).
+Comprobar la zona horaria del servidor antes de fiarse de las horas: los cron usan la hora local del servidor.
 
 ### ⚠️ Interacción con el despliegue del frontend
 
@@ -312,6 +314,13 @@ Tras cambiar el GeoJSON, recordar el **bump de la caché del service worker** (`
 1. Añadir nuevas filas a `map_data_form.csv`.
 2. Ejecutar `adecuacion.py` → actualiza `map_data.csv`.
 3. Ejecutar `generador_map_data.py` → actualiza `map_data.geojson` y `log.json` (sin duplicar lugares ya procesados).
+
+### ✏️ Actualizar los polígonos de campus/edificios
+1. Abrir `editor_kml.html` en el navegador e importar los KML actuales del repositorio (la importación conserva el orden).
+2. Editar los polígonos: mover vértices, renombrar, añadir, eliminar, reordenar.
+3. Descargar los dos archivos y sustituir `campus.kml` y `edificios.kml` en la carpeta.
+4. Si se han añadido, eliminado o renombrado edificios o campus, actualizar también `generador_map_data.py` (`edificio_codes`/`campus_codes` y los conjuntos de edificios por campus); el botón *Copy Python codes* del editor genera los diccionarios ya renumerados.
+5. **Regenerar** (borrar `log.json` y `map_data.geojson` **juntos** y ejecutar `generador_map_data.py`): el incremental solo re-infiere las filas nuevas, de modo que sin regeneración las features existentes no se reubican con los polígonos nuevos.
 
 ---
 
@@ -372,7 +381,7 @@ Tras cambiar el GeoJSON, recordar el **bump de la caché del service worker** (`
 ## 🛑 Solución de Problemas
  | Problema | Posible Causa | Solución |
  |---|---|---|
- | Error al cargar KML | Archivo KML mal formado o inexistente. | Verificar que los KML existan y tengan polígonos con atributo `Name`. |
+ | Error al cargar KML | Archivo KML mal formado o inexistente. | Verificar que los KML existan y tengan polígonos con etiqueta `<name>`. |
  | Ollama no responde | Servicio no iniciado o modelo no descargado. | Ejecutar `ollama serve` y descargar el modelo (`ollama pull mistral:7b`). |
  | `ModuleNotFoundError` en el servidor | El venv no está activado. | Activar el venv antes de ejecutar los scripts. |
  | IDs duplicados | `log.json` corrupto o editado a mano. | **Regenerar**: borrar `log.json` y `map_data.geojson` **juntos** y ejecutar de nuevo. |
@@ -390,5 +399,4 @@ Tras cambiar el GeoJSON, recordar el **bump de la caché del service worker** (`
 - **Extensibilidad**: El sistema está diseñado para adaptarse a otras universidades modificando los códigos y los KML.
 - **Automatización**: En producción se ejecuta con cron (mapa de lunes a viernes, calendario a diario), siempre con descarga atómica de entradas y publicación segura de salidas.
 - **Validación manual**: Siempre revisar los lugares marcados como `"Revisar manualmente"` en `map_data.csv` y **regenerar** después de editar filas a mano.
-- **Sincronización `.ipynb`/`.py`**: Todo cambio al código debe reflejarse en el cuaderno y en su exporte a Python.
-- **Generación de KML**: Se recomienda usar [Google My Maps](https://www.google.com/maps/about/mymaps/) para crear los polígonos de campus y edificios.
+- **Generación de KML**: usar `editor_kml.html` (documentado en `docs_editor_kml.md`) para crear y editar los polígonos de campus y edificios; como alternativa, [Google My Maps](https://www.google.com/maps/about/mymaps/).

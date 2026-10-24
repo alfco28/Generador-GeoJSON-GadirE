@@ -2,11 +2,11 @@
 
 Este proyecto tiene por finalidad facilitar el generar desde cero y actualizar el archivo GeoJSON que contiene los datos del mapa usado en el proyecto *GadirE*.
 
-El programa principal existe como cuaderno (`generador_map_data.ipynb`) y como exporte a Python (`generador_map_data.py`), ambos sincronizados; en el servidor de producción se ejecuta el `.py`.
+El programa principal es `generador_map_data.py` (los cuadernos Jupyter fueron eliminados del repositorio); en el servidor de producción se ejecuta ese mismo archivo.
 
 ## Entrada
 
-Al ejecutarse, tomará tres archivos:
+Al ejecutarse, tomará cinco archivos:
 
 ### `map_data.csv`
 
@@ -32,6 +32,10 @@ Está pensado para que se obtenga a partir de un formulario que rellenen los usu
 
 **Procesamiento incremental**: solo se procesan las filas con **índice mayor que `ultima_fila_procesada`** (según `log.json`) **y** con `Aprobado` igual a `"Sí"` (la comparación ignora mayúsculas/minúsculas y espacios extremos). El resto de filas no genera feature, pero sí avanzan el contador de filas procesadas.
 
+### `campus.kml` y `edificios.kml`
+
+Necesarios. Polígonos de los campus y de los edificios, usados para inferir el campus y el edificio de cada lugar a partir de sus coordenadas (`Point.within(polygon)`, interior estricto: un punto justo sobre el borde puede quedar sin asignar). Cada polígono debe llevar un `<name>` con el nombre exacto del campus o edificio, coincidente con las claves de `campus_codes`/`edificio_codes` establecidas al principio del programa. Para crearlos o editarlos, empléese `editor_kml.html` (ver `docs_editor_kml.md`).
+
 ### `map_data.geojson`
 
 Opcional. Si es dado, se actualizará añadiendo los puntos del mapa nuevos que aparezcan en `map_data.csv`, i.e., los que no estaban ya de antes de acuerdo con `log.json`. El programa no realiza ninguna acción sobre su contenido inicial más que copiarlo para conservarlo en el futuro `map_data.geojson`.
@@ -52,13 +56,13 @@ Archivo que lleva un registro de los lugares que ya se han incluido anteriorment
 
 ## Funcionamiento externo
 
-Está pensado para que se incluya en una carpeta el archivo principal del proyecto (`generador_map_data.ipynb` o su exporte `generador_map_data.py`) y `map_data.csv`.
+Está pensado para que se incluya en una carpeta el archivo principal del proyecto (`generador_map_data.py`), `map_data.csv` y los dos KML (`campus.kml` y `edificios.kml`).
 
 - Si se necesita crear por primera vez el archivo `map_data.geojson`, ejecútese el programa al completo y por orden. Se crearán en la carpeta los archivos `map_data.geojson` y `log.json`.
 - Si se necesita actualizar el archivo `map_data.geojson`, ejecútese de nuevo. Se sobreescribirán los archivos `map_data.geojson` y `log.json`.
 - El proceso es **idempotente**: reejecutar sin filas nuevas (o sin filas aprobadas nuevas) no cambia el resultado.
 
-Déjense estos cuatro archivos en la misma carpeta siempre, y cópiese `map_data.geojson` en la carpeta `data` de *GadirE*.
+Déjense estos seis archivos en la misma carpeta siempre, y cópiese `map_data.geojson` en la carpeta `data` de *GadirE*.
 
 ### Exclusión de lugares sin campus o edificio
 
