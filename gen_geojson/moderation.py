@@ -251,6 +251,15 @@ def procesar_csv(ruta_original, ruta_nuevo):
     elif df_combinado["Duplicado de"].dtype != object:
         df_combinado["Duplicado de"] = df_combinado["Duplicado de"].astype(object)
 
+    # FIX v17 (generaliza el fix v16): las columnas que escribe el bucle
+    # ("Aprobado", "Revisado", "Tipo") sufren el mismo problema en un
+    # ARRANQUE EN FRÍO (sin map_data.csv previo): llegan al concat vacías
+    # (todo NaN) y pandas las deja como float64, así que el primer .at con
+    # una cadena aborta igual que en el error nº 19. Se fuerzan a texto.
+    for columna in ("Aprobado", "Revisado", "Tipo"):
+        if columna in df_combinado.columns and df_combinado[columna].dtype != object:
+            df_combinado[columna] = df_combinado[columna].astype(object)
+
     # Features ya publicadas (map_data.geojson), candidatas a duplicado. En
     # regeneración completa el archivo no existe y devuelve []: las fusiones
     # las resuelve entonces la detección barata del generador.

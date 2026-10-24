@@ -159,6 +159,7 @@ tipo_codes_num = {
 tipo_codes_str = {
     "Área de descanso": "descanso",
     "Aseo o vestuario": "aseo",
+    "Aula": "aula",
     "Biblioteca o sala de estudio": "biblio",
     "Cafetería, fuente o máquina": "cafete",
     "Despacho": "despacho",

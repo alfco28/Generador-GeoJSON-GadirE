@@ -13,11 +13,17 @@
 # backups/<fecha>/ antes de regenerar (se pueden restaurar a mano si hiciera
 # falta).
 
-import os
-import sys
 import time
 
-import registro
+import os
+import sys
+
+# The shared engine (pipeline.py) lives in commands/scripts/, one level below
+# this file: adding it to sys.path lets every entry point import it with the
+# same name, so the body below can keep using `registro` as always.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
+
+import pipeline as registro
 
 # Los dos archivos de estado que hay que borrar SIEMPRE juntos (nunca uno solo)
 ARCHIVOS_ESTADO = ("log.json", "map_data.geojson")

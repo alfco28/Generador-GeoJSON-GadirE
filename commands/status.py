@@ -1,4 +1,4 @@
-# estado.py — Radiografía del estado del proyecto, sin ejecutar nada.
+# status.py — Radiografía del estado del proyecto, sin ejecutar nada.
 #
 # Lee (y sólo lee) log.json, map_data.csv y map_data.geojson y muestra:
 #   - Los archivos y su antigüedad/tamaño.
@@ -12,10 +12,17 @@
 
 import csv
 import json
-import sys
 import time
 
-import registro
+import os
+import sys
+
+# The shared engine (pipeline.py) lives in commands/scripts/, one level below
+# this file: adding it to sys.path lets every entry point import it with the
+# same name, so the body below can keep using `registro` as always.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
+
+import pipeline as registro
 
 
 def _leer_json(ruta):

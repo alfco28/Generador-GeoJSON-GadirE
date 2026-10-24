@@ -1,7 +1,8 @@
-# registro.py — Configuración compartida, registro exhaustivo y utilidades de despliegue (GadirE).
+# pipeline.py — Configuración compartida, registro exhaustivo y utilidades de despliegue (GadirE).
 #
-# Módulo común de todos los scripts de operación (update.py, reset.py,
-# calendario.py, cron.py, estado.py). Reúne en un solo sitio:
+# Módulo común de todos los puntos de entrada de operación (commands/update.py,
+# commands/reset.py, commands/ics.py, commands/cron.py, commands/status.py):
+# cada uno lo importa como `import pipeline as registro`. Reúne en un solo sitio:
 #   1. Las rutas y URLs del proyecto (sobrescribibles con variables de
 #      entorno GADIRE_* para poder probar todo sin tocar el servidor).
 #   2. El registro (log) exhaustivo de cada ejecución: consola +
@@ -10,10 +11,11 @@
 #   3. Las utilidades compartidas: descarga atómica con validación (nunca
 #      deja un archivo a medias si la descarga falla), publicación en la
 #      web con permisos correctos, bloqueo contra ejecuciones solapadas y
-#      ejecución en vivo de los programas del pipeline (adecuacion.py,
-#      generador_map_data.py) volcando su salida al log línea a línea.
+#      ejecución en vivo de los programas del pipeline (gen_geojson/
+#      moderation.py y gen_geojson/generate_geojson.py) volcando su salida
+#      al log línea a línea.
 #
-# Nunca se importa desde adecuacion.py ni generador_map_data.py: ellos son
+# Nunca se importa desde moderation.py ni generate_geojson.py: ellos son
 # programas independientes; este módulo es de los orquestadores.
 
 import fcntl
@@ -28,13 +30,15 @@ from pathlib import Path
 
 # %%
 # ----------------------------- Configuración -----------------------------
-# Directorio base: donde vive este archivo (los scripts funcionan aunque se
-# ejecuten desde cualquier otra carpeta).
+# Directorio base: donde vive este archivo (commands/scripts/). Los puntos
+# de entrada funcionan aunque se ejecuten desde cualquier otra carpeta.
 BASE_DIR = Path(__file__).resolve().parent
 
-# Carpeta del proyecto: por defecto la del propio script (en el servidor es el
-# clon de ~/generador_geojson_gadire). Sobrescribible con GADIRE_RUTA_PROYECTO.
-RUTA_PROYECTO = Path(os.environ.get("GADIRE_RUTA_PROYECTO", str(BASE_DIR)))
+# Carpeta del proyecto: por defecto gen_geojson/ (la carpeta hermana de
+# commands/, dos niveles arriba de este archivo), donde viven los programas
+# del pipeline y TODOS los archivos de estado (CSV, GeoJSON, log.json, KML).
+# Sobrescribible con GADIRE_RUTA_PROYECTO.
+RUTA_PROYECTO = Path(os.environ.get("GADIRE_RUTA_PROYECTO", str(BASE_DIR.parent.parent / "gen_geojson")))
 
 # Carpeta servida por nginx (¡Gadire con mayúsculas! Linux distingue mayúsculas
 # y minúsculas en las rutas). Sobrescribible con GADIRE_RUTA_WEB (para pruebas).
@@ -290,7 +294,7 @@ def ejecutar_programa(programa, logger, env_extra=None):
     Parameters
     ----------
     programa : str
-        Nombre del script (en la raíz del proyecto).
+        Nombre del script (en la carpeta del proyecto, gen_geojson/).
     logger : logging.Logger
         Logger donde se vuelca la salida.
     env_extra : dict, optional
@@ -330,7 +334,7 @@ def ejecutar_programa(programa, logger, env_extra=None):
 def ejecutar_pipeline(logger, modo):
     """
     Pipeline completo de actualización del mapa: descarga del CSV del
-    formulario → adecuacion.py (moderación) → generador_map_data.py
+    formulario → moderation.py (moderación) → generate_geojson.py
     (incremental + dedup) → publicación en la web.
 
     Parameters
@@ -351,7 +355,7 @@ def ejecutar_pipeline(logger, modo):
     descargar(URL_CSV, RUTA_PROYECTO / NOMBRE_CSV, logger, validador=validar_csv_formulario)
 
     # Moderación: su línea RESUMEN_ADECUACION lleva las estadísticas de esta pasada
-    resumen_adec = ejecutar_programa("adecuacion.py", logger)
+    resumen_adec = ejecutar_programa("moderation.py", logger)
 
     # El resumen de la moderación viaja al generador por variable de entorno:
     # así log.json guarda la ejecución COMPLETA en un solo sitio (auditoría)
@@ -359,7 +363,7 @@ def ejecutar_pipeline(logger, modo):
     if " " in resumen_adec:
         env_gen["GADIRE_RESUMEN_ADECUACION"] = resumen_adec.split(" ", 1)[1]
 
-    resumen_gen = ejecutar_programa("generador_map_data.py", logger, env_gen)
+    resumen_gen = ejecutar_programa("generate_geojson.py", logger, env_gen)
 
     # Publicación: sólo si todo lo anterior ha ido bien
     publicar(RUTA_PROYECTO / "map_data.geojson", RUTA_WEB / "map_data.geojson", logger)

@@ -2,7 +2,7 @@
 #
 # El crontab llama SIEMPRE a este archivo, nunca a los otros directamente:
 #     python3 cron.py mapa        -> update.py (pipeline del mapa, incremental)
-#     python3 cron.py calendario  -> calendario.py (ICS de la Presidencia)
+#     python3 cron.py calendario  -> ics.py (ICS de la Presidencia)
 #     python3 cron.py todo        -> los dos, en orden
 #
 # Así el crontab no cambia aunque se añadan pasos, y todo pasa por el mismo
@@ -38,8 +38,8 @@ def main(argv):
         import update
         codigo_salida = max(codigo_salida, update.main())
     if argv[1] in ("calendario", "todo"):
-        import calendario
-        codigo_salida = max(codigo_salida, calendario.main())
+        import ics
+        codigo_salida = max(codigo_salida, ics.main())
     return codigo_salida
 
 
