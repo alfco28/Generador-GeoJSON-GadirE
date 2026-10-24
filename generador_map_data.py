@@ -155,7 +155,6 @@ tipo_codes_num = {
 tipo_codes_str = {
     "Área de descanso": "descanso",
     "Aseo o vestuario": "aseo",
-    "Aula": "aula",
     "Biblioteca o sala de estudio": "biblio",
     "Cafetería, fuente o máquina": "cafete",
     "Despacho": "despacho",
@@ -177,14 +176,23 @@ def redondear_coordenadas(coord):
         return coord
 
 # %%
+# FIX 24-10: el incremental pasa de posicional ("ultima_fila_procesada") a por
+# Timestamp. El bug: las respuestas nuevas del formulario entran ARRIBA del
+# sheet, así que las filas viejas se desplazan de posición y el índice
+# posicional vuelve a procesarlas (duplicando features), mientras que las
+# filas nuevas (índices pequeños) nunca se procesaban. El Timestamp es la
+# clave única de cada aporte (la misma con la que adequacion.py deduplica),
+# así que el incremental por Timestamp es inmune a cualquier reordenación.
 def cargar_log(ruta_log):
     try:
         with open(ruta_log, 'r', encoding='utf-8') as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return {"ultima_fila_procesada": 0, "id_counter": defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))}
+        # Sin log (o corrupto): lista de procesados vacía; se entiende que
+        # también se ha borrado map_data.geojson para regenerar de cero
+        return {"procesados": [], "id_counter": {}}
 
-def guardar_log(ruta_log, ultima_fila, id_counter):
+def guardar_log(ruta_log, procesados, id_counter):
     # Convertir defaultdict a dict normal para guardar en JSON
     id_counter_dict = {}
     for campus, edificios in id_counter.items():
@@ -198,7 +206,7 @@ def guardar_log(ruta_log, ultima_fila, id_counter):
 
     with open(ruta_log, 'w', encoding='utf-8') as f:
         json.dump({
-            "ultima_fila_procesada": ultima_fila,
+            "procesados": sorted(procesados),
             "id_counter": id_counter_dict
         }, f, indent=4)
 
@@ -290,7 +298,14 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
 
     # Cargar el log
     log = cargar_log(ruta_log)
-    ultima_fila = log["ultima_fila_procesada"]
+    # FIX 24-10: si el log tiene el formato antiguo (posicional) no hay forma
+    # de saber qué filas ya están publicadas; seguir aquí duplicaría todo el
+    # mapa. Se aborta pidiendo la regeneración (borrar log.json y
+    # map_data.geojson JUNTOS, como siempre) en lugar de corromper el mapa.
+    if "procesados" not in log:
+        raise SystemExit("log.json con formato antiguo: borra log.json y map_data.geojson (juntos) y vuelve a ejecutar.")
+    # Timestamps de los aportes que ya tienen su feature publicado
+    procesados = set(log.get("procesados", []))
     id_counter = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))
 
     # Cargar el contador de IDs desde el log
@@ -307,16 +322,24 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
             geojson_existente = json.load(f)
             features_antiguos = geojson_existente.get("features", [])
 
-    # Procesar solo las filas nuevas del CSV
+    # Procesar las filas del CSV cuyo Timestamp no esté publicado aún.
+    # Las no aprobadas no se marcan como procesadas: se reexaminan en cada
+    # ejecución (es barato, aquí no hay LLM), de modo que si Alfonso aprueba
+    # a mano una fila "Revisar manualmente" (o cambia un "No" por un "Sí"),
+    # el próximo run la publica sin más (adiós a la trampa de ultima_fila).
     features_nuevos = []
     with open(ruta_csv, mode='r', encoding='utf-8') as archivo_csv:
         lector_csv = csv.DictReader(archivo_csv)
         filas = list(lector_csv)
 
-    for i, fila in enumerate(filas):
-        if i <= ultima_fila:
+    for fila in filas:
+        # Clave única del aporte: el Timestamp del formulario
+        timestamp = fila.get("Timestamp", "").strip()
+
+        # Saltar los aportes que ya tienen su feature publicado
+        if timestamp in procesados:
             continue
-        
+
         # Añadir esta línea para filtrar por "Aprobado" == "Sí"
         if fila.get("Aprobado", "").strip().lower() != "sí":
             continue
@@ -401,8 +424,10 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
 
             features_nuevos.append(feature)
 
-        # La fila queda procesada (aunque se haya excluido) para no reexaminarla en cada ejecución
-        ultima_fila = i  # Actualizar la última fila procesada
+            # FIX 24-10: el aporte queda procesado SOLO cuando su feature se
+            # ha creado (está publicado). Todo lo demás se reexamina en cada
+            # ejecución sin coste (sin LLM) hasta que le toque publicarse.
+            procesados.add(timestamp)
 
     # Combinar features antiguos y nuevos
     features_combinados = features_antiguos + features_nuevos
@@ -439,7 +464,7 @@ def leer_csv_y_generar_json(ruta_csv, ruta_kml_campus="campus.kml", ruta_kml_edi
         json.dump(feature_collection, f, indent=4, ensure_ascii=False)
 
     # Guardar el log actualizado
-    guardar_log(ruta_log, ultima_fila, id_counter)
+    guardar_log(ruta_log, procesados, id_counter)
 
     return feature_collection
 
@@ -454,8 +479,3 @@ feature_collection = leer_csv_y_generar_json(ruta_csv)
 ruta_json = 'map_data.geojson'
 with open(ruta_json, 'w', encoding='utf-8') as archivo_json:
     json.dump(feature_collection, archivo_json, ensure_ascii=False, indent=2)
-
-# %%
-
-
-
